@@ -10,7 +10,7 @@ import java.time.Clock;
 
 @SpringBootApplication
 @Theme("default")
-public class Application implements AppShellConfigurator {
+public class   Application implements AppShellConfigurator {
 
     @Bean
     public Clock clock() {
