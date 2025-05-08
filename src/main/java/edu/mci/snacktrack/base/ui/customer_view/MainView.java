@@ -1,4 +1,4 @@
-package edu.mci.snacktrack.base.ui.view;
+package edu.mci.snacktrack.base.ui.customer_view;
 
 import edu.mci.snacktrack.base.ui.component.ViewToolbar;
 

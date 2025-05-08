@@ -1,4 +1,4 @@
-package edu.mci.snacktrack.base.ui.view;
+package edu.mci.snacktrack.base.ui.customer_view;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.notification.Notification;
