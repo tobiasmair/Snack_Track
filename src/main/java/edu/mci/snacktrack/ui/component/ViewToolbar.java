@@ -1,4 +1,4 @@
-package edu.mci.snacktrack.base.ui.component;
+package edu.mci.snacktrack.ui.component;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;

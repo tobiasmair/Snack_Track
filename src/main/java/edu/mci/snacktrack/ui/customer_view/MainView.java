@@ -1,6 +1,6 @@
-package edu.mci.snacktrack.base.ui.customer_view;
+package edu.mci.snacktrack.ui.customer_view;
 
-import edu.mci.snacktrack.base.ui.component.ViewToolbar;
+import edu.mci.snacktrack.ui.component.ViewToolbar;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Div;

@@ -1,0 +1,61 @@
+classDiagram
+    class User {
+        userID: UUID
+        username: String
+        password: String
+        +getUserId()
+        +getUsername()
+        +setUsername(String)
+        +getPassword()
+        +setPassword(String)
+    }
+    class Customer {
+        firstName: String
+        lastName: String
+        email: String
+        address: String
+        orderHistory: List~Order~
+    }
+
+    class Restaurant {
+        restaurantName: String
+        cuisine: String
+        email: String
+        address: String
+        vatNr: String
+        menu: List~Dish~
+    }
+
+    class Order {
+        dishes: List~Dish~
+        orderStatus: Enum
+    }
+
+    class Dish {
+        dishName: String
+        dishDescription: String
+        price: float
+        calories: Calorie
+        category: List~String~
+    }
+
+    class Calories {
+        caloriesInKcal: int
+        caloriesInKJoule: int
+    }
+
+    class Orderstatus {
+        PLACED
+        ACCEPTED
+        IN_PREPERATION
+        SHIPPED
+        ARRIVED
+    }
+
+    User --* Customer
+    User --* Restaurant
+    Customer --> Order
+    Restaurant --> Dish
+    Order --> Dish
+    Order -- Orderstatus
+    Dish -- Calories
