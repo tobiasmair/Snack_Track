@@ -8,6 +8,7 @@ import java.util.List;
 @Entity
 public class Restaurant extends User{
     private String restaurantName;
+    private String cuisine;
     private String address;
     private String email;
     private String vatNr;
@@ -36,6 +37,14 @@ public class Restaurant extends User{
 
     public void setRestaurantName(String restaurantName) {
         this.restaurantName = restaurantName;
+    }
+
+    public String getCuisine(){
+        return cuisine;
+    }
+
+    public void setCuisine(String cuisine){
+        this.cuisine = cuisine;
     }
 
     public String getAddress() {
