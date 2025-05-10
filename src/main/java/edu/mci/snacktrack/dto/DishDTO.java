@@ -1,37 +1,25 @@
-package edu.mci.snacktrack.model;
+package edu.mci.snacktrack.dto;
 
-import jakarta.persistence.*;
+import edu.mci.snacktrack.model.Restaurant;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "dish")
-public class Dish {
+public class DishDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long dishId;
-
     private String dishName;
     private String dishDescription;
     private double price;
     private int calories;
     private int protein;
     private List<String> category;
-
-    @ManyToOne
-    @JoinColumn(name = "restaurantId")
     private Restaurant restaurant;
-
-
-
 }

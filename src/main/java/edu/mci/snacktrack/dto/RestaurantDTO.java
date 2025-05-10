@@ -1,6 +1,6 @@
-package edu.mci.snacktrack.model;
+package edu.mci.snacktrack.dto;
 
-import jakarta.persistence.*;
+import edu.mci.snacktrack.model.Dish;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,25 +8,17 @@ import lombok.Setter;
 
 import java.util.List;
 
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "restaurant")
-public class Restaurant{
+public class RestaurantDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long restaurantId;
     private String restaurantName;
     private String cuisine;
     private String address;
     private String email;
     private String vatNr;
-
-    @OneToMany(mappedBy = "restaurant")
     private List<Dish> menu;
-
 }

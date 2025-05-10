@@ -1,6 +1,6 @@
-package edu.mci.snacktrack.model;
+package edu.mci.snacktrack.dto;
 
-import jakarta.persistence.*;
+import edu.mci.snacktrack.model.Order;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,22 +12,12 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "customer")
-public class Customer {
+public class CustomerDTO {
 
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long customerId;
-
     private String firstName;
     private String lastName;
-    @Column(name= "email", nullable = false, unique = true)
     private String email;
     private String address;
-
-    @OneToMany(mappedBy = "customer")
     private List<Order> orderHistory;
-
 }
