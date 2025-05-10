@@ -1,34 +1,39 @@
 package edu.mci.snacktrack.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.util.List;
 import java.util.UUID;
 
 @Entity
+@Table(name = "dish")
 public class Dish {
+
     @Id
-    @GeneratedValue
-    private final UUID dishId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long dishId;
 
     private String dishName;
     private String dishDescription;
     private double price;
-    private Calories calories;
+    private int calories;
+    private int protein;
     private List<String> category;
 
-    public Dish(String dishName, String description, float price, int caloriesInKcal){
-        this.dishId = UUID.randomUUID();
+    @ManyToOne
+    @JoinColumn(name = "restaurantId")
+    private Restaurant restaurant;
+
+    public Dish(String dishName, String description, float price, int caloriesInKcal, int protein){
         setDishName(dishName);
         setDishDescription(description);
         setPrice(price);
-        this.calories = new Calories(caloriesInKcal);
+        setCaloriesInKcal(caloriesInKcal);
+        setProtein(protein);
     }
 
     // getter & setter
-    public UUID getDishId() {
+    public long getDishId() {
         return dishId;
     }
 
@@ -57,16 +62,26 @@ public class Dish {
     }
 
     public int getCaloriesInKcal(){
-        return calories.getCaloriesInKcal();
+        return calories;
     }
 
     public void setCaloriesInKcal(int caloriesInKcal){
-        this.calories.setCaloriesInKcal(caloriesInKcal);
+        this.calories = caloriesInKcal;
     }
 
-    public int getCaloriesInKJoule(){
-        return calories.getCaloriesInKJoule();
+    public int getProtein() {
+        return protein;
     }
 
+    public void setProtein(int protein) {
+        this.protein = protein;
+    }
 
+    public List<String> getCategory() {
+        return category;
+    }
+
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
 }

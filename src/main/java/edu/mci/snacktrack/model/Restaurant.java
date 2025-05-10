@@ -1,12 +1,16 @@
 package edu.mci.snacktrack.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.util.List;
 
 @Entity
-public class Restaurant extends User{
+@Table(name = "restaurant")
+public class Restaurant{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long restaurantId;
     private String restaurantName;
     private String cuisine;
     private String address;
@@ -16,21 +20,24 @@ public class Restaurant extends User{
     @OneToMany(mappedBy = "restaurant")
     private List<Dish> menu;
 
-    public Restaurant(String username,
-                      String password,
+    public Restaurant(
                       String restaurantName,
+                      String cuisine,
                       String address,
                       String email,
                       String vatNr){
-
-        super(username, password);
         setRestaurantName(restaurantName);
+        setCuisine(cuisine);
         setAddress(address);
         setEmail(email);
         setVatNr(vatNr);
     }
 
     // getter & setter
+    public long getRestaurantId(){
+        return restaurantId;
+    }
+
     public String getRestaurantName() {
         return restaurantName;
     }
@@ -71,7 +78,7 @@ public class Restaurant extends User{
         this.vatNr = vatNr;
     }
 
-    // TODO: add function to append menu
-
-
+    public List<Dish> getMenu() {
+        return menu;
+    }
 }

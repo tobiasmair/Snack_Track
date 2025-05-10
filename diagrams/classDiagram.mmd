@@ -1,15 +1,6 @@
 classDiagram
-    class User {
-        userID: UUID
-        username: String
-        password: String
-        +getUserId()
-        +getUsername()
-        +setUsername(String)
-        +getPassword()
-        +setPassword(String)
-    }
     class Customer {
+        customerId: long
         firstName: String
         lastName: String
         email: String
@@ -18,6 +9,7 @@ classDiagram
     }
 
     class Restaurant {
+        restaurantId: long
         restaurantName: String
         cuisine: String
         email: String
@@ -27,15 +19,20 @@ classDiagram
     }
 
     class Order {
-        dishes: List~Dish~
+        customer: List~Customer~
+        restaurant: List~Restaurant~
+        orderedDishes: List~Dish~
         orderStatus: Enum
+        createdAt: LocalDateTime
     }
 
     class Dish {
+        dishId: long
         dishName: String
         dishDescription: String
         price: float
         calories: Calorie
+        protien: int
         category: List~String~
     }
 
@@ -52,8 +49,7 @@ classDiagram
         ARRIVED
     }
 
-    User --* Customer
-    User --* Restaurant
+
     Customer --> Order
     Restaurant --> Dish
     Order --> Dish

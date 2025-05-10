@@ -1,28 +1,30 @@
 package edu.mci.snacktrack.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.util.List;
 
 @Entity
-public class Customer extends User{
+@Table(name = "customer")
+public class Customer {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long customerId;
+
     private String firstName;
     private String lastName;
+    @Column(name= "email", nullable = false, unique = true)
     private String email;
     private String address;
 
     @OneToMany(mappedBy = "customer")
     private List<Order> orderHistory;
 
-    public Customer(String username,
-                    String password,
-                    String firstName,
+    public Customer(String firstName,
                     String lastName,
                     String email,
                     String address){
-
-        super(username, password);
         setFirstName(firstName);
         setLastName(lastName);
         setEmail(email);
@@ -32,6 +34,10 @@ public class Customer extends User{
     }
 
     // getter & setter
+    public long getCustomerId(){
+        return customerId;
+    }
+
     public String getFirstName() {
         return firstName;
     }
