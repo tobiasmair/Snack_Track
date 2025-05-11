@@ -1,8 +1,12 @@
 package edu.mci.snacktrack.service;
 
-import edu.mci.snacktrack.dto.RestaurantDTO;
+import edu.mci.snacktrack.model.Restaurant;
 
 public interface RestaurantServiceInterface {
 
-    RestaurantDTO createRestaurant(RestaurantDTO restaurantDTO);
+    Restaurant createRestaurant(String restaurantName,
+                                String cuisine,
+                                String address,
+                                String email,
+                                String vatNr);
 }

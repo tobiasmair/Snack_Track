@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -26,12 +25,20 @@ public class Dish {
     private double price;
     private int calories;
     private int protein;
+    @ElementCollection  //TODO: maybe remove
     private List<String> category;
 
     @ManyToOne
     @JoinColumn(name = "restaurantId")
     private Restaurant restaurant;
 
-
-
+    public Dish(String dishName, String dishDescription, double price, int calories, int protein, List<String> category) {
+        this.dishName = dishName;
+        this.dishDescription =dishDescription;
+        this.price = price;
+        this.calories = calories;
+        this.protein = protein;
+        this.category = category;
+        this.restaurant = null; // TODO this is null for testing -> later implement so that this is the restaurant account that creates the dish
+    }
 }

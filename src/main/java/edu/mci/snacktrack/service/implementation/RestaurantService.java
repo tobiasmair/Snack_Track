@@ -1,7 +1,5 @@
 package edu.mci.snacktrack.service.implementation;
 
-import edu.mci.snacktrack.dto.RestaurantDTO;
-import edu.mci.snacktrack.mapper.RestaurantMapper;
 import edu.mci.snacktrack.model.Restaurant;
 import edu.mci.snacktrack.repositories.RestaurantRepository;
 import edu.mci.snacktrack.service.RestaurantServiceInterface;
@@ -14,12 +12,12 @@ public class RestaurantService implements RestaurantServiceInterface {
 
     private RestaurantRepository restaurantRepository;
 
+
     @Override
-    public RestaurantDTO createRestaurant(RestaurantDTO restaurantDTO) {
+    public Restaurant createRestaurant(String restaurantName, String cuisine, String address, String email, String vatNr) {
 
-        Restaurant restaurant = RestaurantMapper.mapToRestaurant(restaurantDTO);
-        Restaurant savedRestaurant = restaurantRepository.save(restaurant);
-
-        return RestaurantMapper.mapToRestaurantDTO(savedRestaurant);
+        Restaurant newRestaurant = new Restaurant(restaurantName, cuisine, address, email, vatNr);
+        restaurantRepository.save(newRestaurant);
+        return newRestaurant;
     }
 }

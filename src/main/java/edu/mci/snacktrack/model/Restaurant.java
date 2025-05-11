@@ -6,8 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
-
 
 @Getter
 @Setter
@@ -23,10 +23,19 @@ public class Restaurant{
     private String restaurantName;
     private String cuisine;
     private String address;
+    @Column(name= "email", nullable = false, unique = false)    //TODO set unique to 'true' after debugging
     private String email;
     private String vatNr;
 
     @OneToMany(mappedBy = "restaurant")
-    private List<Dish> menu;
+    private List<Dish> menu  = new ArrayList<>();
 
+    public Restaurant(String restaurantName, String cuisine, String address, String email, String vatNr) {
+        this.restaurantName = restaurantName;
+        this.cuisine = cuisine;
+        this.address = address;
+        this.email = email;
+        this.vatNr = vatNr;
+        this.menu = new ArrayList<>();
+    }
 }
