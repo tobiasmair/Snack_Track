@@ -2,7 +2,7 @@ package edu.mci.snacktrack.controller;
 
 
 import edu.mci.snacktrack.dto.CustomerDTO;
-import edu.mci.snacktrack.service.CustomerService;
+import edu.mci.snacktrack.service.implementation.CustomerService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
