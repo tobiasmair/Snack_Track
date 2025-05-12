@@ -31,14 +31,14 @@ import java.util.stream.Collectors;
 /**
  * This view shows up when a user navigates to the root ('/') of the application.
  */
-@Route
-public final class MainView extends Main {
+@Route("main")
+public final class TestView extends Main {
     private final CustomerService customerService;
     private final RestaurantService restaurantService;
     private final DishService dishService;
 
 
-    MainView(CustomerService customerService,
+    TestView(CustomerService customerService,
              RestaurantService restaurantService,
              DishService dishService) {
 
@@ -71,7 +71,6 @@ public final class MainView extends Main {
                 customerLastNameInput.setRequiredIndicatorVisible(true);
                 customerLastNameInput.setErrorMessage("This field is required");
                 customerLastNameInput.setClearButtonVisible(true);
-
 
                 EmailField customerEmailInput = new EmailField("Email");
                 customerEmailInput.setRequiredIndicatorVisible(true);
@@ -222,6 +221,6 @@ public final class MainView extends Main {
      * Navigates to the main view.
      */
     public static void showMainView() {
-        UI.getCurrent().navigate(MainView.class);
+        UI.getCurrent().navigate(TestView.class);
     }
 }
