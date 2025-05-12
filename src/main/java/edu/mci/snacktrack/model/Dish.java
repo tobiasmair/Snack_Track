@@ -17,7 +17,7 @@ import java.util.List;
 public class Dish {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long dishId;
 
     private String dishName;
@@ -25,7 +25,7 @@ public class Dish {
     private double price;
     private int calories;
     private int protein;
-    @ElementCollection  //TODO: maybe remove
+    @ElementCollection
     private List<String> category;
 
     @ManyToOne
@@ -34,7 +34,7 @@ public class Dish {
 
     public Dish(String dishName, String dishDescription, double price, int calories, int protein, List<String> category) {
         this.dishName = dishName;
-        this.dishDescription =dishDescription;
+        this.dishDescription = dishDescription;
         this.price = price;
         this.calories = calories;
         this.protein = protein;
