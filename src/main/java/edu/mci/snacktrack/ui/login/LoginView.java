@@ -33,19 +33,30 @@ public class LoginView extends VerticalLayout {
 
         H1 title = new H1("Welcome to SnackTrack!");
 
+        // Email field
         EmailField emailField = new EmailField("Email");
         emailField.setRequiredIndicatorVisible(true);
         emailField.setErrorMessage("This field is required");
         emailField.setErrorMessage("Enter a valid email address");
         emailField.setClearButtonVisible(true);
 
+        // Password field
         PasswordField passwordField = new PasswordField("Password");
         passwordField.setRequiredIndicatorVisible(true);
         passwordField.setErrorMessage("This field is required");
+
+        // Buttons
         Button loginButton = new Button("Login");
+        Button registerButton = new Button("Register");
+
+        // error message
         Paragraph message = new Paragraph();
         message.setVisible(false);
 
+
+        Paragraph or_text = new Paragraph("or");
+
+        // login function
         loginButton.addClickListener(e -> {
             String email = emailField.getValue();
             String password = passwordField.getValue();
@@ -71,6 +82,8 @@ public class LoginView extends VerticalLayout {
             }
         });
 
-        add(title, emailField, passwordField, loginButton, message);
+        registerButton.addClickListener(e -> UI.getCurrent().navigate("registration"));
+
+        add(title, emailField, passwordField, message, loginButton, or_text, registerButton);
     }
 }
