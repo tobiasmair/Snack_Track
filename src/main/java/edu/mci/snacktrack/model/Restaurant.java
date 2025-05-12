@@ -1,84 +1,43 @@
 package edu.mci.snacktrack.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "restaurant")
 public class Restaurant{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long restaurantId;
+    private Long restaurantId;
     private String restaurantName;
     private String cuisine;
-    private String address;
+    @Column(nullable = false, unique = false)    //TODO set unique to 'true' after debugging
     private String email;
+    private String password; // for now, store password unencrypted
+    private String address;
     private String vatNr;
 
     @OneToMany(mappedBy = "restaurant")
-    private List<Dish> menu;
+    private List<Dish> menu  = new ArrayList<>();
 
-    public Restaurant(
-                      String restaurantName,
-                      String cuisine,
-                      String address,
-                      String email,
-                      String vatNr){
+    public Restaurant(String restaurantName, String cuisine, String email, String password, String address, String vatNr) {
         setRestaurantName(restaurantName);
         setCuisine(cuisine);
-        setAddress(address);
         setEmail(email);
+        setPassword(password);
+        setAddress(address);
         setVatNr(vatNr);
-    }
-
-    // getter & setter
-    public long getRestaurantId(){
-        return restaurantId;
-    }
-
-    public String getRestaurantName() {
-        return restaurantName;
-    }
-
-    public void setRestaurantName(String restaurantName) {
-        this.restaurantName = restaurantName;
-    }
-
-    public String getCuisine(){
-        return cuisine;
-    }
-
-    public void setCuisine(String cuisine){
-        this.cuisine = cuisine;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getVatNr() {
-        return vatNr;
-    }
-
-    public void setVatNr(String vatNr) {
-        this.vatNr = vatNr;
-    }
-
-    public List<Dish> getMenu() {
-        return menu;
+        this.menu = new ArrayList<>();
     }
 }

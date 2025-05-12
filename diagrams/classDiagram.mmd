@@ -1,6 +1,6 @@
 classDiagram
     class Customer {
-        customerId: long
+        customerId: Long
         firstName: String
         lastName: String
         email: String
@@ -9,7 +9,7 @@ classDiagram
     }
 
     class Restaurant {
-        restaurantId: long
+        restaurantId: Long
         restaurantName: String
         cuisine: String
         email: String
@@ -19,6 +19,7 @@ classDiagram
     }
 
     class Order {
+        orderID: Long
         customer: List~Customer~
         restaurant: List~Restaurant~
         orderedDishes: List~Dish~
@@ -27,7 +28,7 @@ classDiagram
     }
 
     class Dish {
-        dishId: long
+        dishId: Long
         dishName: String
         dishDescription: String
         price: float

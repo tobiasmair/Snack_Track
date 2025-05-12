@@ -1,80 +1,44 @@
 package edu.mci.snacktrack.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "customer")
 public class Customer {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long customerId;
+    private Long customerId;
 
     private String firstName;
     private String lastName;
-    @Column(name= "email", nullable = false, unique = true)
+    @Column(name= "email", nullable = false, unique = false)    //TODO set unique to 'true' after debugging
     private String email;
+    private String password; // for now, store password unencrypted
     private String address;
 
     @OneToMany(mappedBy = "customer")
-    private List<Order> orderHistory;
+    private List<Order> orderHistory = new ArrayList<>();
 
-    public Customer(String firstName,
-                    String lastName,
-                    String email,
-                    String address){
-        setFirstName(firstName);
-        setLastName(lastName);
-        setEmail(email);
-        setAddress(address);
-
-
+    public Customer(String firstName, String lastName, String email, String password, String address) {
+        this.setFirstName(firstName);
+        this.setLastName(lastName);
+        this.setEmail(email);
+        this.setPassword(password);
+        this.setAddress(address);
+        this.orderHistory = new ArrayList<>();
     }
-
-    // getter & setter
-    public long getCustomerId(){
-        return customerId;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public List<Order> getOrderHistory() {
-        return orderHistory;
-    }
-
-
-
-    // TODO: add function to append orderHistory
 }

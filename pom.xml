@@ -90,6 +90,15 @@
             <optional>true</optional>
         </dependency>
 
+        <!-- Lombok to get automatic Getter and Setter generation  -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.38</version>
+            <scope>provided</scope>
+        </dependency>
+
+
         <!-- Testing -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

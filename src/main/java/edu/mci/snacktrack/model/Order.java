@@ -1,16 +1,24 @@
 package edu.mci.snacktrack.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
+@AllArgsConstructor
 @Entity
 @Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long orderId;
+    private Long orderId;
 
     @ManyToMany
     @JoinTable(
@@ -18,18 +26,19 @@ public class Order {
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "dish_id")
     )
-    private List<Dish> orderedDishes;
+    private List<Dish> orderedDishes = new ArrayList<>();
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @Enumerated(EnumType.STRING)
-    private OrderStatus orderStatus;
-
     @ManyToOne(optional = false)
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
+
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
+
 
     private LocalDateTime createdAt;
 
@@ -38,46 +47,11 @@ public class Order {
         this.createdAt = LocalDateTime.now();
     }
 
-
-    // getter & setter
-    public long getOrderId() {
-        return orderId;
-    }
-
-    public OrderStatus getOrderStatus() {
-        return orderStatus;
-    }
-
-    public void setOrderStatus(OrderStatus orderStatus) {
-        this.orderStatus = orderStatus;
-    }
-
-    public List<Dish> getOrderedDishes() {
-        return orderedDishes;
-    }
-
-    public void setOrderedDishes(List<Dish> orderedDishes) {
-        this.orderedDishes = orderedDishes;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public Restaurant getRestaurant() {
-        return restaurant;
-    }
-
-    public void setRestaurant(Restaurant restaurant) {
-        this.restaurant = restaurant;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public Order(){
+        this.orderedDishes = new ArrayList<>();
+        this.customer = null; // TODO this is null for testing -> later implement so that this is the customer account that creates the order
+        this.restaurant = null; // TODO this is null for testing -> later implement so that this is the restaurant the user has selected
+        setOrderStatus(OrderStatus.PLACED);
     }
 }
 

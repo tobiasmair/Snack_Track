@@ -1,87 +1,44 @@
 package edu.mci.snacktrack.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
-import java.util.UUID;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "dish")
 public class Dish {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long dishId;
+    private Long dishId;
 
     private String dishName;
     private String dishDescription;
     private double price;
     private int calories;
     private int protein;
+    @ElementCollection  //TODO: maybe remove
     private List<String> category;
 
     @ManyToOne
     @JoinColumn(name = "restaurantId")
     private Restaurant restaurant;
 
-    public Dish(String dishName, String description, float price, int caloriesInKcal, int protein){
-        setDishName(dishName);
-        setDishDescription(description);
-        setPrice(price);
-        setCaloriesInKcal(caloriesInKcal);
-        setProtein(protein);
-    }
-
-    // getter & setter
-    public long getDishId() {
-        return dishId;
-    }
-
-    public String getDishName() {
-        return dishName;
-    }
-
-    public void setDishName(String dishName) {
+    public Dish(String dishName, String dishDescription, double price, int calories, int protein, List<String> category) {
         this.dishName = dishName;
-    }
-
-    public String getDishDescription() {
-        return dishDescription;
-    }
-
-    public void setDishDescription(String dishDescription) {
-        this.dishDescription = dishDescription;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
+        this.dishDescription =dishDescription;
         this.price = price;
-    }
-
-    public int getCaloriesInKcal(){
-        return calories;
-    }
-
-    public void setCaloriesInKcal(int caloriesInKcal){
-        this.calories = caloriesInKcal;
-    }
-
-    public int getProtein() {
-        return protein;
-    }
-
-    public void setProtein(int protein) {
+        this.calories = calories;
         this.protein = protein;
-    }
-
-    public List<String> getCategory() {
-        return category;
-    }
-
-    public Restaurant getRestaurant() {
-        return restaurant;
+        this.category = category;
+        this.restaurant = null; // TODO this is null for testing -> later implement so that this is the restaurant account that creates the dish
     }
 }
