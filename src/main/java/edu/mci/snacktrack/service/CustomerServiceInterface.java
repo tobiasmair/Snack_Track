@@ -8,5 +8,6 @@ public interface CustomerServiceInterface {
     Customer createCustomer(String firstName,
                             String lastName,
                             String email,
+                            String password,
                             String address);
 }

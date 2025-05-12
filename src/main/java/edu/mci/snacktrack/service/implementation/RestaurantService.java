@@ -14,9 +14,9 @@ public class RestaurantService implements RestaurantServiceInterface {
 
 
     @Override
-    public Restaurant createRestaurant(String restaurantName, String cuisine, String address, String email, String vatNr) {
+    public Restaurant createRestaurant(String restaurantName, String cuisine, String email, String password, String address,  String vatNr) {
 
-        Restaurant newRestaurant = new Restaurant(restaurantName, cuisine, address, email, vatNr);
+        Restaurant newRestaurant = new Restaurant(restaurantName, cuisine, email, password, address, vatNr);
         restaurantRepository.save(newRestaurant);
         return newRestaurant;
     }

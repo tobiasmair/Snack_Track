@@ -27,15 +27,17 @@ public class Customer {
     private String lastName;
     @Column(name= "email", nullable = false, unique = false)    //TODO set unique to 'true' after debugging
     private String email;
+    private String password; // for now, store password unencrypted
     private String address;
 
     @OneToMany(mappedBy = "customer")
     private List<Order> orderHistory = new ArrayList<>();
 
-    public Customer(String firstName, String lastName, String email, String address) {
+    public Customer(String firstName, String lastName, String email, String password, String address) {
         this.setFirstName(firstName);
         this.setLastName(lastName);
         this.setEmail(email);
+        this.setPassword(password);
         this.setAddress(address);
         this.orderHistory = new ArrayList<>();
     }

@@ -13,8 +13,8 @@ public class CustomerService implements CustomerServiceInterface {
         private CustomerRepository customerRepository;
 
     @Override
-    public Customer createCustomer(String firstName, String lastName, String email, String address) {
-        Customer newCustomer = new Customer(firstName, lastName, email, address);
+    public Customer createCustomer(String firstName, String lastName, String email, String password, String address) {
+        Customer newCustomer = new Customer(firstName, lastName, email, password, address);
         customerRepository.save(newCustomer);
 
         return newCustomer;

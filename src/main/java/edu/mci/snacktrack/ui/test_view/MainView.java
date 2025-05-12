@@ -17,6 +17,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
@@ -77,6 +78,10 @@ public final class MainView extends Main {
                 customerEmailInput.setErrorMessage("Enter a valid email address");
                 customerEmailInput.setClearButtonVisible(true);
 
+                PasswordField customerPasswordInput = new PasswordField("Password");
+                customerPasswordInput.setRequiredIndicatorVisible(true);
+                customerPasswordInput.setErrorMessage("This field is required");
+
                 TextField customerAddressInput = new TextField("Address");
                 customerAddressInput.setRequiredIndicatorVisible(true);
                 customerAddressInput.setErrorMessage("This field is required");
@@ -89,9 +94,10 @@ public final class MainView extends Main {
                     String firstName = customerFirstNameInput.getValue();
                     String lastName = customerLastNameInput.getValue();
                     String email = customerEmailInput.getValue();
+                    String password = customerPasswordInput.getValue();
                     String address = customerAddressInput.getValue();
 
-                    Customer newCustomer = customerService.createCustomer(firstName, lastName, email, address);
+                    Customer newCustomer = customerService.createCustomer(firstName, lastName, email, password, address);
 
                     System.out.println("Customer created: " + newCustomer);
                 });
@@ -122,6 +128,10 @@ public final class MainView extends Main {
             restaurantEmailInput.setErrorMessage("Enter a valid email address");
             restaurantEmailInput.setClearButtonVisible(true);
 
+            PasswordField restaurantPasswordInput = new PasswordField("Password");
+            restaurantPasswordInput.setRequiredIndicatorVisible(true);
+            restaurantPasswordInput.setErrorMessage("This field is required");
+
             TextField restaurantVatNrInput = new TextField("Vat. Number");
             restaurantVatNrInput.setRequiredIndicatorVisible(true);
             restaurantVatNrInput.setErrorMessage("This field is required");
@@ -132,11 +142,12 @@ public final class MainView extends Main {
             createRestaurantButton.addClickListener(event -> {
                 String restaurantName = restaurantNameInput.getValue();
                 String cuisine = restaurantCuisineInput.getValue();
-                String address = restaurantAddressInput.getValue();
                 String email = restaurantEmailInput.getValue();
+                String password = restaurantPasswordInput.getValue();
+                String address = restaurantAddressInput.getValue();
                 String varNr = restaurantVatNrInput.getValue();
 
-                Restaurant newRestaurant = restaurantService.createRestaurant(restaurantName, cuisine, address, email, varNr);
+                Restaurant newRestaurant = restaurantService.createRestaurant(restaurantName, cuisine, email, password, address, varNr);
 
                 System.out.println("Restaurant created: " + newRestaurant);
             });
@@ -196,9 +207,9 @@ public final class MainView extends Main {
 
 
 
-        testAddCustomer.add(customerFirstNameInput, customerLastNameInput, customerEmailInput, customerAddressInput, createCustomerButton);
+        testAddCustomer.add(customerFirstNameInput, customerLastNameInput, customerEmailInput, customerPasswordInput, customerAddressInput, createCustomerButton);
 
-        testAddRestaurant.add(restaurantNameInput, restaurantCuisineInput, restaurantEmailInput, restaurantAddressInput, restaurantVatNrInput, createRestaurantButton);
+        testAddRestaurant.add(restaurantNameInput, restaurantCuisineInput, restaurantEmailInput, restaurantPasswordInput, restaurantAddressInput, restaurantVatNrInput, createRestaurantButton);
 
         testAddDish.add(dishNameInput, dishDescriptionInput, dishPriceInput, dishCaloriesInput, dishProteinInput, dishCategoryInput, createDishButton);
 

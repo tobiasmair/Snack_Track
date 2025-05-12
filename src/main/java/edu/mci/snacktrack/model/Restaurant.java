@@ -22,20 +22,22 @@ public class Restaurant{
     private Long restaurantId;
     private String restaurantName;
     private String cuisine;
-    private String address;
-    @Column(name= "email", nullable = false, unique = false)    //TODO set unique to 'true' after debugging
+    @Column(nullable = false, unique = false)    //TODO set unique to 'true' after debugging
     private String email;
+    private String password; // for now, store password unencrypted
+    private String address;
     private String vatNr;
 
     @OneToMany(mappedBy = "restaurant")
     private List<Dish> menu  = new ArrayList<>();
 
-    public Restaurant(String restaurantName, String cuisine, String address, String email, String vatNr) {
-        this.restaurantName = restaurantName;
-        this.cuisine = cuisine;
-        this.address = address;
-        this.email = email;
-        this.vatNr = vatNr;
+    public Restaurant(String restaurantName, String cuisine, String email, String password, String address, String vatNr) {
+        setRestaurantName(restaurantName);
+        setCuisine(cuisine);
+        setEmail(email);
+        setPassword(password);
+        setAddress(address);
+        setVatNr(vatNr);
         this.menu = new ArrayList<>();
     }
 }
