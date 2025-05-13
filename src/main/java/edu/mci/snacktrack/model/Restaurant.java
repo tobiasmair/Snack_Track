@@ -21,8 +21,9 @@ public class Restaurant{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long restaurantId;
     private String restaurantName;
-    private String cuisine;
-    @Column(nullable = false, unique = false)    //TODO set unique to 'true' after debugging
+    @Enumerated(EnumType.STRING)
+    private Cuisine cuisine;
+    @Column(nullable = false, unique = true)
     private String email;
     private String password; // for now, store password unencrypted
     private String address;
@@ -31,7 +32,7 @@ public class Restaurant{
     @OneToMany(mappedBy = "restaurant")
     private List<Dish> menu  = new ArrayList<>();
 
-    public Restaurant(String restaurantName, String cuisine, String email, String password, String address, String vatNr) {
+    public Restaurant(String restaurantName, Cuisine cuisine, String email, String password, String address, String vatNr) {
         setRestaurantName(restaurantName);
         setCuisine(cuisine);
         setEmail(email);

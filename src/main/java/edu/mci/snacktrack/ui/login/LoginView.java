@@ -35,14 +35,12 @@ public class LoginView extends VerticalLayout {
 
         // Email field
         EmailField emailField = new EmailField("Email");
-        emailField.setRequiredIndicatorVisible(true);
         emailField.setErrorMessage("This field is required");
         emailField.setErrorMessage("Enter a valid email address");
         emailField.setClearButtonVisible(true);
 
         // Password field
         PasswordField passwordField = new PasswordField("Password");
-        passwordField.setRequiredIndicatorVisible(true);
         passwordField.setErrorMessage("This field is required");
 
         // Buttons

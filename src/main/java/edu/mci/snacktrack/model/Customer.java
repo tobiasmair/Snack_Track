@@ -25,7 +25,7 @@ public class Customer {
 
     private String firstName;
     private String lastName;
-    @Column(name= "email", nullable = false, unique = false)    //TODO set unique to 'true' after debugging
+    @Column(name= "email", nullable = false, unique = true)
     private String email;
     private String password; // for now, store password unencrypted
     private String address;
