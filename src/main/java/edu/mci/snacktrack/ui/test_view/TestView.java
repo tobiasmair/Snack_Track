@@ -101,56 +101,6 @@ public final class TestView extends Main {
                     System.out.println("Customer created: " + newCustomer);
                 });
 
-        // Creating Restaurant
-        HorizontalLayout testAddRestaurant = new HorizontalLayout();
-        testAddRestaurant.setSpacing(true); // adds space between components
-        testAddRestaurant.setPadding(false); // optional: no internal padding
-        testAddRestaurant.setMargin(false);  // optional: no margin around layout
-
-            TextField restaurantNameInput = new TextField("Restaurant Name");
-            restaurantNameInput.setRequiredIndicatorVisible(true);
-            restaurantNameInput.setErrorMessage("This field is required");
-            restaurantNameInput.setClearButtonVisible(true);
-
-            TextField restaurantCuisineInput = new TextField("Cuisine");
-            restaurantCuisineInput.setRequiredIndicatorVisible(true);
-            restaurantCuisineInput.setErrorMessage("This field is required");
-            restaurantCuisineInput.setClearButtonVisible(true);
-
-            TextField restaurantAddressInput = new TextField("Address");
-            restaurantAddressInput.setRequiredIndicatorVisible(true);
-            restaurantAddressInput.setErrorMessage("This field is required");
-            restaurantAddressInput.setClearButtonVisible(true);
-
-            EmailField restaurantEmailInput = new EmailField("Email");
-            restaurantEmailInput.setRequiredIndicatorVisible(true);
-            restaurantEmailInput.setErrorMessage("Enter a valid email address");
-            restaurantEmailInput.setClearButtonVisible(true);
-
-            PasswordField restaurantPasswordInput = new PasswordField("Password");
-            restaurantPasswordInput.setRequiredIndicatorVisible(true);
-            restaurantPasswordInput.setErrorMessage("This field is required");
-
-            TextField restaurantVatNrInput = new TextField("Vat. Number");
-            restaurantVatNrInput.setRequiredIndicatorVisible(true);
-            restaurantVatNrInput.setErrorMessage("This field is required");
-            restaurantVatNrInput.setClearButtonVisible(true);
-
-            Button createRestaurantButton = new Button("Create Restaurant");
-
-            createRestaurantButton.addClickListener(event -> {
-                String restaurantName = restaurantNameInput.getValue();
-                String cuisine = restaurantCuisineInput.getValue();
-                String email = restaurantEmailInput.getValue();
-                String password = restaurantPasswordInput.getValue();
-                String address = restaurantAddressInput.getValue();
-                String varNr = restaurantVatNrInput.getValue();
-
-                Restaurant newRestaurant = restaurantService.createRestaurant(restaurantName, cuisine, email, password, address, varNr);
-
-                System.out.println("Restaurant created: " + newRestaurant);
-            });
-
         // Creating Dish
         HorizontalLayout testAddDish = new HorizontalLayout();
         testAddDish.setSpacing(true); // adds space between components
@@ -208,11 +158,11 @@ public final class TestView extends Main {
 
         testAddCustomer.add(customerFirstNameInput, customerLastNameInput, customerEmailInput, customerPasswordInput, customerAddressInput, createCustomerButton);
 
-        testAddRestaurant.add(restaurantNameInput, restaurantCuisineInput, restaurantEmailInput, restaurantPasswordInput, restaurantAddressInput, restaurantVatNrInput, createRestaurantButton);
+
 
         testAddDish.add(dishNameInput, dishDescriptionInput, dishPriceInput, dishCaloriesInput, dishProteinInput, dishCategoryInput, createDishButton);
 
-        testCreateModels.add(testAddCustomer, testAddRestaurant, testAddDish);
+        testCreateModels.add(testAddCustomer, testAddDish);
 
         add(testCreateModels);
     }

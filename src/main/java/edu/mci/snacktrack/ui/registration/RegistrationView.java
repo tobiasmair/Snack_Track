@@ -12,6 +12,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import edu.mci.snacktrack.model.Cuisine;
 import edu.mci.snacktrack.model.Customer;
 import edu.mci.snacktrack.model.Restaurant;
 import edu.mci.snacktrack.service.implementation.CustomerService;
@@ -61,20 +62,25 @@ public class RegistrationView extends VerticalLayout {
 
 
     private HorizontalLayout createCustomerForm() {
+
         TextField firstName = new TextField("First Name");
         firstName.setRequiredIndicatorVisible(true);
+        firstName.setErrorMessage("This field is required");
 
         TextField lastName = new TextField("Last Name");
         lastName.setRequiredIndicatorVisible(true);
+        lastName.setErrorMessage("This field is required");
 
         EmailField email = new EmailField("Email");
         email.setRequiredIndicatorVisible(true);
+        email.setErrorMessage("Enter a valid email address");
 
         PasswordField password = new PasswordField("Password");
         password.setRequiredIndicatorVisible(true);
+        password.setErrorMessage("This field is required");
+        password.setClearButtonVisible(true);
 
         TextField address = new TextField("Address");
-        address.setRequiredIndicatorVisible(true);
 
         Button register = new Button("Create Customer");
 
@@ -82,22 +88,34 @@ public class RegistrationView extends VerticalLayout {
         status.setVisible(false);
 
         register.addClickListener(e -> {
-            if (email.isEmpty() || password.isEmpty()) {
-                status.setText("Email and password are required.");
+
+            if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()) {
+                status.setText("First Name, Last Name, Email and Password are required.");
                 status.setVisible(true);
                 return;
             }
 
-            Customer customer = customerService.createCustomer(
-                    firstName.getValue(),
-                    lastName.getValue(),
-                    email.getValue(),
-                    password.getValue(),
-                    address.getValue()
-            );
 
-            status.setText("Customer created: " + customer.getFirstName() + " " + customer.getLastName());
-            status.setVisible(true);
+            try {
+                Customer customer = customerService.createCustomer(
+                        firstName.getValue(),
+                        lastName.getValue(),
+                        email.getValue(),
+                        password.getValue(),
+                        address.isEmpty() ? "-not set yet" : address.getValue()
+                );
+
+                register.setEnabled(false); // prevents multiple clicks
+
+                status.setText("Customer created: " + customer.getFirstName() + " " + customer.getLastName() + " -> proceed to Login");
+                status.setVisible(true);
+
+
+            } catch (IllegalArgumentException ex){
+                status.setText(ex.getMessage());
+                status.setVisible(true);
+                register.setEnabled(true);
+            }
         });
 
         return new HorizontalLayout(firstName, lastName, email, password, address, register, status);
@@ -105,23 +123,27 @@ public class RegistrationView extends VerticalLayout {
 
 
     private HorizontalLayout createRestaurantForm() {
-        TextField name = new TextField("Restaurant Name");
-        name.setRequiredIndicatorVisible(true);
+        TextField restaurantName = new TextField("Restaurant Name");
+        restaurantName.setRequiredIndicatorVisible(true);
+        restaurantName.setErrorMessage("This field is required");
 
-        TextField cuisine = new TextField("Cuisine");
-        cuisine.setRequiredIndicatorVisible(true);
+        ComboBox<Cuisine> cuisineSelect = new ComboBox<>("Cuisine");
+        cuisineSelect.setItems(Cuisine.values());
+        cuisineSelect.setRequired(true);
+        cuisineSelect.setErrorMessage("This field is required");
 
         EmailField email = new EmailField("Email");
         email.setRequiredIndicatorVisible(true);
+        email.setErrorMessage("Enter a valid email address");
 
         PasswordField password = new PasswordField("Password");
         password.setRequiredIndicatorVisible(true);
+        password.setErrorMessage("This field is required");
+        password.setClearButtonVisible(true);
 
         TextField address = new TextField("Address");
-        address.setRequiredIndicatorVisible(true);
 
         TextField vatNr = new TextField("VAT Number");
-        vatNr.setRequiredIndicatorVisible(true);
 
         Button register = new Button("Create Restaurant");
 
@@ -129,25 +151,35 @@ public class RegistrationView extends VerticalLayout {
         status.setVisible(false);
 
         register.addClickListener(e -> {
-            if (email.isEmpty() || password.isEmpty()) {
-                status.setText("Email and password are required.");
+            if (restaurantName.isEmpty() || cuisineSelect.isEmpty() || email.isEmpty() || password.isEmpty()) {
+                status.setText("Name, Cuisine, Email and Password are required.");
                 status.setVisible(true);
                 return;
             }
 
+
+            try {
             Restaurant restaurant = restaurantService.createRestaurant(
-                    name.getValue(),
-                    cuisine.getValue(),
+                    restaurantName.getValue(),
+                    cuisineSelect.getValue(),
                     email.getValue(),
                     password.getValue(),
-                    address.getValue(),
-                    vatNr.getValue()
+                    address.isEmpty() ? "-not set yet-" : address.getValue(),
+                    vatNr.isEmpty() ? "-not set yet-" : vatNr.getValue()
             );
 
-            status.setText("Restaurant created: " + restaurant.getRestaurantName());
+            register.setEnabled(false); // prevents multiple clicks
+
+            status.setText("Restaurant created: " + restaurant.getRestaurantName() + " -> proceed to Login");
             status.setVisible(true);
+
+            } catch (IllegalArgumentException ex){
+                status.setText(ex.getMessage());
+                status.setVisible(true);
+                register.setEnabled(true);
+            }
         });
 
-        return new HorizontalLayout(name, cuisine, email, password, address, vatNr, register, status);
+        return new HorizontalLayout(restaurantName, cuisineSelect, email, password, address, vatNr, register, status);
     }
 }
