@@ -45,7 +45,14 @@ public class CustomerLayout extends AppLayout {
     private SideNav createSideNav() {
         var nav = new SideNav();
         nav.addClassNames(Margin.Horizontal.MEDIUM);
-        MenuConfiguration.getMenuEntries().forEach(entry -> nav.addItem(createSideNavItem(entry)));
+
+        //MenuConfiguration.getMenuEntries().forEach(entry -> nav.addItem(createSideNavItem(entry)));
+
+        nav.addItem(new SideNavItem("Home", "customer-home", new Icon(VaadinIcon.HOME)));
+        nav.addItem(new SideNavItem("Basket", "customer-basket", new Icon(VaadinIcon.CART)));
+        nav.addItem(new SideNavItem("Order History", "customer-orders", new Icon(VaadinIcon.TRUCK)));
+        nav.addItem(new SideNavItem("Profile", "customer-profile", new Icon(VaadinIcon.USER)));
+
         return nav;
     }
 
@@ -75,7 +82,11 @@ public class CustomerLayout extends AppLayout {
 
         var userMenuItem = userMenu.addItem(avatar);
         userMenuItem.add(fullName);
-        userMenuItem.getSubMenu().addItem("View Profile"); // TODO implement navigation to UserProfie View
+        // Navigate to Customer Profile
+        userMenuItem.getSubMenu().addItem("View Profile", e -> {
+            UI.getCurrent().navigate("customer-profile");
+        });
+        // Logout User
         userMenuItem.getSubMenu().addItem("Logout", e -> {
             VaadinSession.getCurrent().close();
             UI.getCurrent().navigate("");
