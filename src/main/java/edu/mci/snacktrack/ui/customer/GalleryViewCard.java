@@ -19,11 +19,13 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
 import com.vaadin.flow.theme.lumo.LumoUtility.Width;
 
 public class GalleryViewCard extends ListItem {
-
+    private Long restaurantId;
     private final String cuisine;
 
-    public GalleryViewCard(String text, String label, String url) {
+    public GalleryViewCard(Long restaurantId, String name, String label, String url) {
+        this.restaurantId = restaurantId;
         this.cuisine = label;
+
         addClassNames(Background.CONTRAST_5, Display.FLEX, FlexDirection.COLUMN, AlignItems.START, Padding.MEDIUM,
                 BorderRadius.LARGE);
 
@@ -35,14 +37,14 @@ public class GalleryViewCard extends ListItem {
         Image image = new Image();
         image.setWidth("100%");
         image.setSrc(url);
-        image.setAlt(text);
+        image.setAlt(name);
 
         div.add(image);
 
         // Header Text
         Span header = new Span();
         header.addClassNames(FontSize.XLARGE, FontWeight.SEMIBOLD);
-        header.setText(text);
+        header.setText(name);
 
         // Label Cuisine
         Paragraph description = new Paragraph(label);
@@ -54,6 +56,10 @@ public class GalleryViewCard extends ListItem {
 
         add(div, header, description, badge);
 
+    }
+
+    public Long getRestaurantId() {
+        return restaurantId;
     }
 
     public String getCuisine() {

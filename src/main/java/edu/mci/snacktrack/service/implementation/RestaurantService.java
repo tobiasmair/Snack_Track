@@ -8,6 +8,9 @@ import edu.mci.snacktrack.service.RestaurantServiceInterface;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class RestaurantService implements RestaurantServiceInterface {
@@ -27,4 +30,19 @@ public class RestaurantService implements RestaurantServiceInterface {
         restaurantRepository.save(newRestaurant);
         return newRestaurant;
     }
+
+    @Override
+    public List<Restaurant> getAllRestaurants() {
+        return restaurantRepository.findAll();
+    }
+
+    @Override
+    public Optional<Restaurant> findById(Long id) {
+        return restaurantRepository.findById(id);
+    }
+
+    public Optional<Restaurant> findByIdWithMenu(Long id) {
+        return restaurantRepository.findByIdWithMenu(id);
+    }
+
 }
