@@ -17,14 +17,13 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
 import com.vaadin.flow.theme.lumo.LumoUtility.Overflow;
 import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
 import com.vaadin.flow.theme.lumo.LumoUtility.Width;
+import edu.mci.snacktrack.model.Restaurant;
 
 public class GalleryViewCard extends ListItem {
-    private Long restaurantId;
-    private final String cuisine;
+    private String cuisine;
 
-    public GalleryViewCard(Long restaurantId, String name, String label, String url) {
-        this.restaurantId = restaurantId;
-        this.cuisine = label;
+    public GalleryViewCard(Restaurant restaurant, String url) {
+        this.cuisine = String.valueOf(restaurant.getCuisine());
 
         addClassNames(Background.CONTRAST_5, Display.FLEX, FlexDirection.COLUMN, AlignItems.START, Padding.MEDIUM,
                 BorderRadius.LARGE);
@@ -37,29 +36,25 @@ public class GalleryViewCard extends ListItem {
         Image image = new Image();
         image.setWidth("100%");
         image.setSrc(url);
-        image.setAlt(name);
+        image.setAlt(restaurant.getRestaurantName());
 
         div.add(image);
 
         // Header Text
         Span header = new Span();
         header.addClassNames(FontSize.XLARGE, FontWeight.SEMIBOLD);
-        header.setText(name);
+        header.setText(restaurant.getRestaurantName());
 
         // Label Cuisine
-        Paragraph description = new Paragraph(label);
+        Paragraph description = new Paragraph(restaurant.getAddress());
         description.addClassName(Margin.Vertical.MEDIUM);
 
         Span badge = new Span();
         badge.getElement().setAttribute("theme", "badge");
-        badge.setText(label);
+        badge.setText(cuisine);
 
         add(div, header, description, badge);
 
-    }
-
-    public Long getRestaurantId() {
-        return restaurantId;
     }
 
     public String getCuisine() {

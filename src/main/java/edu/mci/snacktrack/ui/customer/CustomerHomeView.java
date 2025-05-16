@@ -50,9 +50,7 @@ public class CustomerHomeView extends VerticalLayout implements BeforeEnterObser
 
             // Load ViewCard for every Restaurant in the DB
             GalleryViewCard card = new GalleryViewCard(
-                    restaurant.getRestaurantId(),
-                    restaurant.getRestaurantName(),
-                    restaurant.getCuisine().name(),
+                    restaurant,
                     imageUrl
             );
             allCards.add(card);
