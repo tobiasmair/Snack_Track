@@ -1,6 +1,7 @@
 package edu.mci.snacktrack.service;
 
 import edu.mci.snacktrack.model.Dish;
+import edu.mci.snacktrack.model.Restaurant;
 
 import java.util.List;
 
@@ -11,5 +12,6 @@ public interface DishServiceInterface {
                     double price,
                     int calories,
                     int protein,
-                    List<String> category);
+                    List<String> category,
+                    Restaurant restaurantId);
 }
