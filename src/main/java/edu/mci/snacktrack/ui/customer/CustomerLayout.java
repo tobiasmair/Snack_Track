@@ -51,6 +51,7 @@ public class CustomerLayout extends AppLayout {
         nav.addItem(new SideNavItem("Home", "customer-home", new Icon(VaadinIcon.HOME)));
         nav.addItem(new SideNavItem("Basket", "customer-basket", new Icon(VaadinIcon.CART)));
         nav.addItem(new SideNavItem("Order History", "customer-orders", new Icon(VaadinIcon.TRUCK)));
+        nav.addItem(new SideNavItem("Basket2", "customer-basket2", new Icon(VaadinIcon.CART)));
 
         return nav;
     }
