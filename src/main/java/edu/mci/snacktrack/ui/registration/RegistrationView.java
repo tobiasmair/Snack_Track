@@ -102,7 +102,7 @@ public class RegistrationView extends VerticalLayout {
                         lastName.getValue(),
                         email.getValue(),
                         password.getValue(),
-                        address.isEmpty() ? "-not set yet" : address.getValue()
+                        address.isEmpty() ? "-not set yet-" : address.getValue()
                 );
 
                 register.setEnabled(false); // prevents multiple clicks
