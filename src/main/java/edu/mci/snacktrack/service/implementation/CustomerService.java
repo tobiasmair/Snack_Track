@@ -5,7 +5,6 @@ import edu.mci.snacktrack.repositories.CustomerRepository;
 import edu.mci.snacktrack.repositories.RestaurantRepository;
 import edu.mci.snacktrack.service.CustomerServiceInterface;
 import lombok.AllArgsConstructor;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

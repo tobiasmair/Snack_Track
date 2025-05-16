@@ -1,11 +1,12 @@
 package edu.mci.snacktrack.ui.login;
 
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
@@ -14,7 +15,6 @@ import edu.mci.snacktrack.model.Restaurant;
 import edu.mci.snacktrack.service.implementation.AuthService;
 import edu.mci.snacktrack.ui.customer.CustomerHomeView;
 import edu.mci.snacktrack.ui.restaurant.RestaurantHomeView;
-import com.vaadin.flow.component.html.Paragraph;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Route("")
