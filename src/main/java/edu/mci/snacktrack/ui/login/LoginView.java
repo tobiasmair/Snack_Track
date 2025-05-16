@@ -65,6 +65,7 @@ public class LoginView extends VerticalLayout {
                     Customer customer = authService.getCustomerByEmail(email);
                     VaadinSession.getCurrent().setAttribute("user", customer);
                     VaadinSession.getCurrent().setAttribute("userRole", "customer");
+                    VaadinSession.getCurrent().setAttribute("userEmail", customer.getEmail());
                     UI.getCurrent().navigate(CustomerHomeView.class);
                 }
                 case "restaurant" -> {
