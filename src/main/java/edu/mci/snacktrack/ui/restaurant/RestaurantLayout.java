@@ -44,6 +44,9 @@ public class RestaurantLayout extends AppLayout {
         var nav = new SideNav();
         nav.addClassNames(LumoUtility.Margin.Horizontal.MEDIUM);
         MenuConfiguration.getMenuEntries().forEach(entry -> nav.addItem(createSideNavItem(entry)));
+        nav.addItem(new SideNavItem("Home", "restaurant-home", new Icon(VaadinIcon.HOME)));
+        nav.addItem(new SideNavItem("Menu", "restaurant-menu", new Icon(VaadinIcon.MENU)));
+        nav.addItem(new SideNavItem("Report", "restaurant-report", new Icon(VaadinIcon.TRUCK)));
         return nav;
     }
 
