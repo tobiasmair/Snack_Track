@@ -41,4 +41,8 @@ public class Customer {
         this.setAddress(address);
         this.orderHistory = new ArrayList<>();
     }
+
+    public Long getId() {
+        return customerId;
+    }
 }
