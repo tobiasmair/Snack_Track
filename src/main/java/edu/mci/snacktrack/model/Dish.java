@@ -32,13 +32,13 @@ public class Dish {
     @JoinColumn(name = "restaurantId")
     private Restaurant restaurant;
 
-    public Dish(String dishName, String dishDescription, double price, int calories, int protein, List<String> category) {
+    public Dish(String dishName, String dishDescription, double price, int calories, int protein, List<String> category, Restaurant restaurantId) {
         this.dishName = dishName;
         this.dishDescription = dishDescription;
         this.price = price;
         this.calories = calories;
         this.protein = protein;
         this.category = category;
-        this.restaurant = null; // TODO this is null for testing -> later implement so that this is the restaurant account that creates the dish
+        this.restaurant = restaurantId;
     }
 }
