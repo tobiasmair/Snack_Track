@@ -11,10 +11,12 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 import edu.mci.snacktrack.model.Order;
+import edu.mci.snacktrack.model.OrderStatus;
 import edu.mci.snacktrack.service.implementation.CustomerService;
 import edu.mci.snacktrack.service.implementation.OrderService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Route(value = "customer-orders", layout = CustomerLayout.class)
 @PageTitle("Customer Orders")
@@ -52,17 +54,49 @@ public class CustomerOrderHistory extends VerticalLayout implements BeforeEnterO
             if (orders.isEmpty()) {
                 add(new Paragraph("No orders found."));
             } else {
-                HorizontalLayout orderHistoryLayout = new HorizontalLayout();
-                orderHistoryLayout.setWrap(true);
-                orderHistoryLayout.setWidthFull();
-                orderHistoryLayout.setAlignItems(Alignment.START);
-                orderHistoryLayout.setJustifyContentMode(JustifyContentMode.START);
 
-                orders.forEach(order -> {
-                    orderHistoryLayout.add(new OrderViewCard(order));
-                });
+                // Active Orders (Status not ARRIVED)
+                List<Order> activeOrders = orders.stream()
+                        .filter(order -> order.getOrderStatus() != OrderStatus.ARRIVED)
+                        .collect(Collectors.toList());
 
-                add(orderHistoryLayout);
+                add(new H2("Active Orders"));
+                if (activeOrders.isEmpty()) {
+                    add(new Paragraph("No active orders found."));
+                } else {
+                    HorizontalLayout activeOrderLayout = new HorizontalLayout();
+                    activeOrderLayout.setWrap(true);
+                    activeOrderLayout.setWidthFull();
+                    activeOrderLayout.setAlignItems(Alignment.START);
+                    activeOrderLayout.setJustifyContentMode(JustifyContentMode.START);
+
+                    activeOrders.forEach(order -> {
+                        activeOrderLayout.add(new OrderViewCard(order));
+                    });
+
+                    add(activeOrderLayout);
+                }
+
+                // Past Orders (Status == ARRIVED)
+                List<Order> pastOrders = orders.stream()
+                        .filter(order -> order.getOrderStatus() == OrderStatus.ARRIVED)
+                        .collect(Collectors.toList());
+
+                add(new H2("Past Orders"));
+                if (pastOrders.isEmpty()) {
+                    add(new Paragraph("No past orders."));
+                } else {
+                    HorizontalLayout pastOrderLayout = new HorizontalLayout();
+                    pastOrderLayout.setWrap(true);
+                    pastOrderLayout.setWidthFull();
+                    pastOrderLayout.setAlignItems(Alignment.START);
+                    pastOrderLayout.setJustifyContentMode(JustifyContentMode.START);
+
+                    pastOrders.forEach(order -> pastOrderLayout.add(new OrderViewCard(order)));
+                    add(pastOrderLayout);
+                }
+
+
             }
         }, () -> add(new Paragraph("Customer not found.")));
     }
