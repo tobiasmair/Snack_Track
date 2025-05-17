@@ -23,9 +23,9 @@ jobs:
       - run:
           name: Docker Build & Push
           command: |
-            docker build -t vaadincrm.azurecr.io/vaadincrm:latest .
-            echo $DOCKER_PASS | docker login vaadincrm.azurecr.io -u $DOCKER_USER --password-stdin
-            docker push vaadincrm.azurecr.io/vaadincrm:latest
+            docker build -t vaadindockercontainer.azurecr.io/vaadincrm:latest .
+            echo $DOCKER_PASS | docker login vaadindockercontainer.azurecr.io -u $DOCKER_USER --password-stdin
+            docker push vaadindockercontainer.azurecr.io/vaadincrm:latest
       - run:
           name: Update Azure Web App
           command: |
@@ -33,8 +33,8 @@ jobs:
             az webapp config container set \
               --name $AZURE_WEBAPP_NAME \
               --resource-group $AZURE_RESOURCE_GROUP \
-              --docker-custom-image-name vaadincrm.azurecr.io/vaadincrm:latest \
-              --docker-registry-server-url https://vaadincrm.azurecr.io \
+              --docker-custom-image-name vaadindockercontainer.azurecr.io/vaadincrm:latest \
+              --docker-registry-server-url https://vaadindockercontainer.azurecr.io \
               --docker-registry-server-user $DOCKER_USER \
               --docker-registry-server-password $DOCKER_PASS
 
