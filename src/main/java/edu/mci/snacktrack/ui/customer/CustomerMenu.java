@@ -70,7 +70,7 @@ public class CustomerMenu extends VerticalLayout implements BeforeEnterObserver 
                 dishLayout.setJustifyContentMode(JustifyContentMode.CENTER);
 
                 restaurant.getMenu().forEach(dish -> {
-                    dishLayout.add(new MenuViewCard(dish, true));
+                    dishLayout.add(new MenuViewCard(dish, true, false));
                 });
 
                 add(dishLayout);

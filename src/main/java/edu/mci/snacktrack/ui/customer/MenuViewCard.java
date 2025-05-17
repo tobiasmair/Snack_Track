@@ -8,18 +8,15 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import edu.mci.snacktrack.model.BasketSession;
 import edu.mci.snacktrack.model.Dish;
-import org.apache.catalina.LifecycleState;
-
-import java.util.List;
 
 public class MenuViewCard extends VerticalLayout {
     private boolean showButton;
 
     public MenuViewCard(Dish dish) {
-        this(dish, false);
+        this(dish, false, false);
     }
 
-    public MenuViewCard(Dish dish, boolean showButton) {
+    public MenuViewCard(Dish dish, boolean showaddButton, boolean clearBasketButton) {
 
         addClassName("menu-view-card");
         setWidth("300px");
@@ -38,13 +35,17 @@ public class MenuViewCard extends VerticalLayout {
 
         add(name, price, calories, description);
 
-        if (showButton) {
+        if (showaddButton) {
             Button button = new Button("Add to basket");
             button.addClickListener(event -> {
                 button.setEnabled(false);
 
-                BasketSession.addDish(dish);
-                Notification.show(dish.getDishName() + " added to basket!", 3000, Notification.Position.MIDDLE);
+                try {
+                    BasketSession.addDish(dish);
+                    Notification.show(dish.getDishName() + " added to basket!", 3000, Notification.Position.MIDDLE);
+                } catch (IllegalArgumentException e) {
+                    Notification.show(e.getMessage(), 3000, Notification.Position.MIDDLE);
+                }
 
                 // Enable button after timer
                 UI ui = UI.getCurrent();
@@ -56,6 +57,15 @@ public class MenuViewCard extends VerticalLayout {
                 }).start();
             });
             add(button);
+        }
+
+        if (clearBasketButton) {
+            Button clearBasket = new Button("Remove dish");
+            clearBasket.addClickListener(event -> {
+                BasketSession.removeDish(dish);
+                UI.getCurrent().getPage().reload();
+            });
+            add(clearBasket);
         }
     }
 }
