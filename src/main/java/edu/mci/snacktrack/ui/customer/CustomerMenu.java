@@ -3,6 +3,7 @@ package edu.mci.snacktrack.ui.customer;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
@@ -43,8 +44,10 @@ public class CustomerMenu extends VerticalLayout implements BeforeEnterObserver 
         this.restaurantService = restaurantService;
 
         setSizeFull();
-        setAlignItems(Alignment.CENTER);
-        setJustifyContentMode(JustifyContentMode.CENTER);
+
+        // Auskommentiert um Überschrift nicht zu formatieren
+        //setAlignItems(Alignment.CENTER);
+        //setJustifyContentMode(JustifyContentMode.CENTER);
 
         //add(new H2("Customer Menu"));
     }
@@ -60,9 +63,17 @@ public class CustomerMenu extends VerticalLayout implements BeforeEnterObserver 
             if (restaurant.getMenu() == null || restaurant.getMenu().isEmpty()) {
                 add(new Paragraph("No dishes listed"));
             } else {
+                HorizontalLayout dishLayout = new HorizontalLayout();
+                dishLayout.setWrap(true);
+                dishLayout.setWidthFull();
+                dishLayout.setAlignItems(Alignment.CENTER);
+                dishLayout.setJustifyContentMode(JustifyContentMode.CENTER);
+
                 restaurant.getMenu().forEach(dish -> {
-                    add(buildDishCard(dish));
+                    dishLayout.add(new MenuViewCard(dish, true, false));
                 });
+
+                add(dishLayout);
             }
         }, () -> {
             add(new H2("Restaurant not found"));
@@ -70,12 +81,4 @@ public class CustomerMenu extends VerticalLayout implements BeforeEnterObserver 
 
     }
 
-    private VerticalLayout buildDishCard(Dish dish) {
-        VerticalLayout card = new VerticalLayout();
-        card.addClassName("dish-card");
-        card.add(new H2(dish.getDishName()));
-        card.add(new Paragraph("Price: €" + dish.getPrice()));
-        card.add(new Paragraph("Description: " + dish.getDishDescription()));
-        return card;
-    }
 }
