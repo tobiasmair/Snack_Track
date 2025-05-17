@@ -16,7 +16,7 @@ COPY --chown=myuser pom.xml ./
 RUN mvn dependency:go-offline -Pproduction
 
 COPY --chown=myuser:myuser src src
-COPY --chown=myuser:myuser frontend frontend
+COPY --chown=myuser:myuser src/main/frontend frontend
 
 RUN mvn clean package -DskipTests -Pproduction \
     -Dvaadin.offlineKey=${VAADIN_OFFLINE_KEY}
