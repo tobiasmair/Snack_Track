@@ -1,8 +1,10 @@
 package edu.mci.snacktrack.ui.restaurant;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.*;
@@ -11,6 +13,7 @@ import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
+import edu.mci.snacktrack.model.BasketSession;
 import edu.mci.snacktrack.model.Dish;
 import edu.mci.snacktrack.model.Restaurant;
 import edu.mci.snacktrack.service.implementation.DishService;
@@ -44,7 +47,7 @@ public class RestaurantMenuView extends VerticalLayout implements BeforeEnterObs
         setSizeFull();
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
-        add(new H2("Welcome, Restaurant!"));
+        add(new H2("Menu Overview"));
 
         HorizontalLayout dishForm = createDishForm();
 
@@ -85,35 +88,31 @@ public class RestaurantMenuView extends VerticalLayout implements BeforeEnterObs
 
         Button createDishButton = new Button("Create Dish");
 
-        Paragraph status = new Paragraph();
-        status.setVisible(false);
-
         createDishButton.addClickListener(e -> {
 
+            createDishButton.setEnabled(false);
+
             if (dishName.isEmpty() || dishPrice.isEmpty()) {
-                status.setText("Dish Name and Price are required.");
-                status.setVisible(true);
+                showNotification("Dish Name and Price are required.", createDishButton);
                 return;
             }
 
             if (dishPrice.getValue() < 0) {
-                status.setText("Price must be positive.");
-                status.setVisible(true);
+                showNotification("Price must be a positive value.", createDishButton);
                 return;
             }
 
             if (!dishCalories.isEmpty() && dishCalories.getValue() < 0) {
-                status.setText("Calories must be positive.");
-                status.setVisible(true);
+                showNotification("Calories must be a positive value.", createDishButton);
                 return;
             }
 
             if (!dishProtein.isEmpty() && dishProtein.getValue() < 0) {
-                status.setText("Protein must be positive.");
-                status.setVisible(true);
+                showNotification("Protein must be a positive value.", createDishButton);
                 return;
             }
 
+            // parsing categories
             String rawCategories = dishCategories.getValue();
             List<String> categories = Arrays.stream(rawCategories.split(";"))
                     .map(String::trim)       // Trim spaces
@@ -130,18 +129,40 @@ public class RestaurantMenuView extends VerticalLayout implements BeforeEnterObs
                         categories,
                         restaurant
                 );
-
-                status.setText("Dish " + "'" + newDish.getDishName() + "'" + " created!");
-                status.setVisible(true);
+                showNotification("Dish '" + newDish.getDishName() + "' created!", createDishButton);
 
 
             } catch (IllegalArgumentException ex){
-                status.setText(ex.getMessage());
-                status.setVisible(true);
+                showNotification(ex.getMessage(), createDishButton);
             }
+
+            // Enable button after timer
+            UI ui = UI.getCurrent();
+            new Thread(() -> {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException ignored) {}
+                ui.access(() -> createDishButton.setEnabled(true));
+            }).start();
         });
 
 
-        return new HorizontalLayout(dishName, dishDescription, dishPrice, dishCalories, dishProtein, dishCategories, createDishButton, status);
+        return new HorizontalLayout(dishName, dishDescription, dishPrice, dishCalories, dishProtein, dishCategories, createDishButton);
     }
+
+
+    // helper method to show notification and enable button
+    private void showNotification(String message, Button enableButton) {
+        Notification.show(message, 3000, Notification.Position.MIDDLE);
+
+        // Re-enable button after delay
+        UI ui = UI.getCurrent();
+        new Thread(() -> {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException ignored) {}
+            ui.access(() -> enableButton.setEnabled(true));
+        }).start();
+    }
+
 }
