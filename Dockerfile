@@ -22,7 +22,7 @@ RUN mvn clean package -DskipTests -Pproduction \
     -Dvaadin.offlineKey=${VAADIN_OFFLINE_KEY}
 
 # -------------------------
-# 🚀 Run Stage
+# 🚀 Run Stage - To the Moon
 # -------------------------
 FROM maven:3.8.1-openjdk-17-slim
 
