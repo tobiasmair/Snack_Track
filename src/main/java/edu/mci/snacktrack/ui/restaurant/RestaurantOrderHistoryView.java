@@ -8,28 +8,28 @@ import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
+import edu.mci.snacktrack.model.Order;
 import edu.mci.snacktrack.model.Restaurant;
 import edu.mci.snacktrack.service.implementation.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import edu.mci.snacktrack.model.Order;
 
 import java.util.List;
 
-@Route(value = "restaurant-home", layout = RestaurantLayout.class)
-@PageTitle("Restaurant Home")
-public class RestaurantHomeView extends VerticalLayout implements BeforeEnterObserver {
+@Route(value = "restaurant-completed-orders", layout = RestaurantLayout.class)
+@PageTitle("Restaurant Completed Orders")
+public class RestaurantOrderHistoryView extends VerticalLayout implements BeforeEnterObserver {
 
     private final OrderService orderService;
     private final Div ordersScrollContainer = new Div();
 
-    public RestaurantHomeView(@Autowired OrderService orderService) {
+    public RestaurantOrderHistoryView(@Autowired OrderService orderService) {
         this.orderService = orderService;
 
         setSizeFull();
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
 
-        add(new H2("Open Orders"));
+        add(new H2("Completed Orders"));
 
         // Set up the scrollable container for orders
         ordersScrollContainer.setWidth("100%");
@@ -44,7 +44,7 @@ public class RestaurantHomeView extends VerticalLayout implements BeforeEnterObs
         add(ordersScrollContainer);
         setFlexGrow(1, ordersScrollContainer);
 
-        refreshOrderList();
+        refreshOrderHistoryList();
     }
 
 
@@ -56,15 +56,15 @@ public class RestaurantHomeView extends VerticalLayout implements BeforeEnterObs
         }
     }
 
-    private void refreshOrderList() {
+    private void refreshOrderHistoryList() {
         ordersScrollContainer.removeAll();
         Restaurant restaurant = (Restaurant) VaadinSession.getCurrent().getAttribute("user");
         if (restaurant == null) return;
 
-        List<Order> openOrders = orderService.getOpenOrdersByRestaurant(restaurant);
+        List<Order> openOrders = orderService.getPastOrdersByRestaurant(restaurant);
         if (openOrders.isEmpty()) {
             Div emptyMsg = new Div();
-            emptyMsg.setText("No open orders yet.");
+            emptyMsg.setText("No completed orders yet.");
             emptyMsg.getStyle()
                     .set("font-size", "1.3rem")
                     .set("color", "#888")
