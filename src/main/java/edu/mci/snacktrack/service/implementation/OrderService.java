@@ -31,4 +31,19 @@ public class OrderService implements OrderServiceInterface {
     public List<Order> getOrderbyCustomer(Customer customer) {
         return orderRepository.findByCustomerWithDishes(customer);
     };
+
+
+    public List<Order> getOpenOrdersByRestaurant(Restaurant restaurant) {
+        return orderRepository.findByRestaurantAndOrderStatusInWithDishes(
+                restaurant,
+                List.of(OrderStatus.PLACED, OrderStatus.ACCEPTED, OrderStatus.IN_PREPARATION, OrderStatus.SHIPPED)
+        );
+    }
+
+    public void updateOrderStatus(Order order, OrderStatus newStatus) {
+        order.setOrderStatus(newStatus);
+        orderRepository.save(order);
+    }
+
+
 }
