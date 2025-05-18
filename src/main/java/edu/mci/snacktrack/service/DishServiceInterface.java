@@ -16,4 +16,6 @@ public interface DishServiceInterface {
                     List<String> category,
                     Restaurant restaurantId);
 
+    List<Dish> findByRestaurant(Restaurant restaurant);
+
 }

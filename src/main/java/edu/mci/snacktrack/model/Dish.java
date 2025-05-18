@@ -17,7 +17,7 @@ import java.util.List;
 public class Dish {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long dishId;
 
     private String dishName;
@@ -32,13 +32,13 @@ public class Dish {
     @JoinColumn(name = "restaurantId")
     private Restaurant restaurant;
 
-    public Dish(String dishName, String dishDescription, double price, int calories, int protein, List<String> category, Restaurant restaurantId) {
+    public Dish(String dishName, String dishDescription, double price, int calories, int protein, List<String> category, Restaurant restaurant) {
         this.dishName = dishName;
         this.dishDescription = dishDescription;
         this.price = price;
         this.calories = calories;
         this.protein = protein;
         this.category = category;
-        this.restaurant = restaurantId;
+        this.restaurant = restaurant;
     }
 }
