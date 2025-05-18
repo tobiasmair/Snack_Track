@@ -46,8 +46,8 @@ public class RestaurantLayout extends AppLayout {
         MenuConfiguration.getMenuEntries().forEach(entry -> nav.addItem(createSideNavItem(entry)));
         nav.addItem(new SideNavItem("Open Orders", "restaurant-home", new Icon(VaadinIcon.HOME)));
         nav.addItem(new SideNavItem("Menu", "restaurant-menu", new Icon(VaadinIcon.MENU)));
+        nav.addItem(new SideNavItem("Completed Orders", "restaurant-completed-orders", new Icon(VaadinIcon.CHECK)));
         nav.addItem(new SideNavItem("Report", "restaurant-report", new Icon(VaadinIcon.DIAMOND)));
-        //nav.addItem(new SideNavItem("Orders", "restaurant-orders", new Icon(VaadinIcon.DIAMOND)));
         return nav;
     }
 

@@ -45,5 +45,12 @@ public class OrderService implements OrderServiceInterface {
         orderRepository.save(order);
     }
 
+    public List<Order> getPastOrdersByRestaurant(Restaurant restaurant) {
+        return orderRepository.findByRestaurantAndOrderStatusInWithDishes(
+                restaurant,
+                List.of(OrderStatus.ARRIVED)
+        );
+    }
+
 
 }
