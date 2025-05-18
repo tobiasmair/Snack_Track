@@ -23,4 +23,11 @@ public class DishService implements DishServiceInterface {
 
         return newDish;
     }
+
+    @Override
+    public List<Dish> findByRestaurant(Restaurant restaurant) {
+        return dishRepository.findByRestaurant(restaurant);
+    }
+
+
 }
