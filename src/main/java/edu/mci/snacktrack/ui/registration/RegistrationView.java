@@ -4,7 +4,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
@@ -84,14 +84,13 @@ public class RegistrationView extends VerticalLayout {
 
         Button register = new Button("Create Customer");
 
-        Paragraph status = new Paragraph();
-        status.setVisible(false);
 
         register.addClickListener(e -> {
 
+            register.setEnabled(false); // prevents multiple clicks
+
             if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()) {
-                status.setText("First Name, Last Name, Email and Password are required.");
-                status.setVisible(true);
+                showNotification("First Name, Last Name, Email and Password are required.", register);
                 return;
             }
 
@@ -107,18 +106,19 @@ public class RegistrationView extends VerticalLayout {
 
                 register.setEnabled(false); // prevents multiple clicks
 
-                status.setText("Customer created: " + customer.getFirstName() + " " + customer.getLastName() + " -> proceed to Login");
-                status.setVisible(true);
+                showNotificationAndRedirect(
+                        "Customer created: " + customer.getFirstName() + " " + customer.getLastName() + " -> redirecting to Login...",
+                        register,
+                        ""
+                );
 
 
             } catch (IllegalArgumentException ex){
-                status.setText(ex.getMessage());
-                status.setVisible(true);
-                register.setEnabled(true);
+                showNotification(ex.getMessage(), register);
             }
         });
 
-        return new HorizontalLayout(firstName, lastName, email, password, address, register, status);
+        return new HorizontalLayout(firstName, lastName, email, password, address, register);
     }
 
 
@@ -147,13 +147,13 @@ public class RegistrationView extends VerticalLayout {
 
         Button register = new Button("Create Restaurant");
 
-        Paragraph status = new Paragraph();
-        status.setVisible(false);
 
         register.addClickListener(e -> {
+            register.setEnabled(false); // prevents multiple clicks
+
+
             if (restaurantName.isEmpty() || cuisineSelect.isEmpty() || email.isEmpty() || password.isEmpty()) {
-                status.setText("Name, Cuisine, Email and Password are required.");
-                status.setVisible(true);
+                showNotification("Name, Cuisine, Email and Password are required.", register);
                 return;
             }
 
@@ -168,18 +168,42 @@ public class RegistrationView extends VerticalLayout {
                     vatNr.isEmpty() ? "-not set yet-" : vatNr.getValue()
             );
 
-            register.setEnabled(false); // prevents multiple clicks
 
-            status.setText("Restaurant created: " + restaurant.getRestaurantName() + " -> proceed to Login");
-            status.setVisible(true);
+                showNotificationAndRedirect(
+                        "Restaurant created: " + restaurant.getRestaurantName() + " -> redirecting to Login...",
+                        register,
+                        ""
+                );
 
             } catch (IllegalArgumentException ex){
-                status.setText(ex.getMessage());
-                status.setVisible(true);
-                register.setEnabled(true);
+                showNotification(ex.getMessage(), register);
             }
         });
 
-        return new HorizontalLayout(restaurantName, cuisineSelect, email, password, address, vatNr, register, status);
+        return new HorizontalLayout(restaurantName, cuisineSelect, email, password, address, vatNr, register);
+    }
+
+    // helper method to show notification and enable button
+    private void showNotification(String message, Button enableButton) {
+        Notification.show(message, 3000, Notification.Position.MIDDLE);
+        UI ui = UI.getCurrent();
+        new Thread(() -> {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException ignored) {}
+            ui.access(() -> enableButton.setEnabled(true));
+        }).start();
+    }
+
+    // helper method to show notification and redirect to login page
+    private void showNotificationAndRedirect(String message, Button enableButton, String targetRoute) {
+        Notification.show(message, 3000, Notification.Position.MIDDLE);
+        UI ui = UI.getCurrent();
+        new Thread(() -> {
+            try {
+                Thread.sleep(3000); // 3-second delay
+            } catch (InterruptedException ignored) {}
+            ui.access(() -> ui.navigate(targetRoute)); // redirect after delay
+        }).start();
     }
 }

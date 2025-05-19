@@ -1,8 +1,10 @@
 package edu.mci.snacktrack.ui.restaurant;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.*;
@@ -14,19 +16,69 @@ import com.vaadin.flow.server.VaadinSession;
 import edu.mci.snacktrack.model.Dish;
 import edu.mci.snacktrack.model.Restaurant;
 import edu.mci.snacktrack.service.implementation.DishService;
+import edu.mci.snacktrack.ui.customer.MenuViewCard;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @Route(value = "restaurant-menu", layout = RestaurantLayout.class)
 @PageTitle("Restaurant Menu")
 public class RestaurantMenuView extends VerticalLayout implements BeforeEnterObserver {
 
     private final DishService dishService;
+    private final Div dishesScrollContainer = new Div();
+    private final Div emptyMenuMessage = new Div();
 
+    private HorizontalLayout createDishForm; // The form layout
+    private Button showFormButton;           // The "Add a dish" button
+
+    public RestaurantMenuView(@Autowired DishService dishService) {
+        this.dishService = dishService;
+
+        setSizeFull();
+        setAlignItems(Alignment.CENTER);
+        setJustifyContentMode(JustifyContentMode.CENTER);
+
+        add(new H2("Menu Overview"));
+
+        // create button to show form
+        showFormButton = new Button("Add a dish", event -> toggleFormVisibility());
+        add(showFormButton);
+
+        // create the form (initially hidden)
+        createDishForm = createDishForm();
+        createDishForm.setVisible(false);  // Hide at start
+        add(createDishForm);
+
+        // scrollable container for dish-cards
+        dishesScrollContainer.setWidth("100%");
+        dishesScrollContainer.getStyle()
+                .set("max-height", "60vh")
+                .set("overflow-y", "auto")
+                .set("padding", "1rem")
+                .set("display", "flex")
+                .set("flex-wrap", "wrap")
+                .set("justify-content", "center")
+                .set("gap", "1rem");
+
+        add(dishesScrollContainer);
+        setFlexGrow(1, dishesScrollContainer); // makes the scroll container fill available space
+
+
+        emptyMenuMessage.setText("Menu is empty → Create a dish!");
+        emptyMenuMessage.getStyle()
+                .set("font-size", "1.3rem")
+                .set("color", "#888")
+                .set("margin", "2rem auto")
+                .set("text-align", "center");
+
+        emptyMenuMessage.setVisible(false); // hidden at first
+        add(emptyMenuMessage);
+
+        refreshDishList();
+    }
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
@@ -36,25 +88,26 @@ public class RestaurantMenuView extends VerticalLayout implements BeforeEnterObs
         }
     }
 
-    @Autowired
-    public RestaurantMenuView(DishService dishService) {
+    // Displays all current dishes for the restaurant
+    private void refreshDishList() {
+        dishesScrollContainer.removeAll();
+        Restaurant restaurant = (Restaurant) VaadinSession.getCurrent().getAttribute("user");
+        if (restaurant == null) return;
 
-        this.dishService = dishService;
+        List<Dish> dishes = dishService.findByRestaurant(restaurant);
 
-        setSizeFull();
-        setAlignItems(Alignment.CENTER);
-        setJustifyContentMode(JustifyContentMode.CENTER);
-        add(new H2("Welcome, Restaurant!"));
-
-        HorizontalLayout dishForm = createDishForm();
-
-        add(dishForm);
+        if (dishes.isEmpty()) {
+            emptyMenuMessage.setVisible(true);
+        } else {
+            emptyMenuMessage.setVisible(false);
+            for (Dish dish : dishes) {
+                dishesScrollContainer.add(new MenuViewCard(dish, false, true));
+            }
+        }
     }
 
+    // Dish creation form
     private HorizontalLayout createDishForm() {
-        Restaurant restaurant = (Restaurant) VaadinSession.getCurrent().getAttribute("user");
-
-
         TextField dishName = new TextField("Dish Name");
         dishName.setRequiredIndicatorVisible(true);
         dishName.setErrorMessage("This field is required");
@@ -70,12 +123,12 @@ public class RestaurantMenuView extends VerticalLayout implements BeforeEnterObs
         dishPrice.setPlaceholder("Enter a decimal number");
 
         IntegerField dishCalories = new IntegerField("Calories");
-        dishCalories.setMin(0); //  prevent negative values
+        dishCalories.setMin(0);
         dishCalories.setPlaceholder("Enter an integer");
         dishCalories.setErrorMessage("Calories must be positive");
 
         IntegerField dishProtein = new IntegerField("Protein");
-        dishProtein.setMin(0); //  prevent negative values
+        dishProtein.setMin(0);
         dishProtein.setPlaceholder("Enter an integer");
         dishProtein.setErrorMessage("Protein must be positive");
 
@@ -85,40 +138,40 @@ public class RestaurantMenuView extends VerticalLayout implements BeforeEnterObs
 
         Button createDishButton = new Button("Create Dish");
 
-        Paragraph status = new Paragraph();
-        status.setVisible(false);
-
         createDishButton.addClickListener(e -> {
+            createDishButton.setEnabled(false);
 
             if (dishName.isEmpty() || dishPrice.isEmpty()) {
-                status.setText("Dish Name and Price are required.");
-                status.setVisible(true);
+                showNotification("Dish Name and Price are required.", createDishButton);
                 return;
             }
 
             if (dishPrice.getValue() < 0) {
-                status.setText("Price must be positive.");
-                status.setVisible(true);
+                showNotification("Price must be a positive value.", createDishButton);
                 return;
             }
 
             if (!dishCalories.isEmpty() && dishCalories.getValue() < 0) {
-                status.setText("Calories must be positive.");
-                status.setVisible(true);
+                showNotification("Calories must be a positive value.", createDishButton);
                 return;
             }
 
             if (!dishProtein.isEmpty() && dishProtein.getValue() < 0) {
-                status.setText("Protein must be positive.");
-                status.setVisible(true);
+                showNotification("Protein must be a positive value.", createDishButton);
                 return;
             }
 
             String rawCategories = dishCategories.getValue();
             List<String> categories = Arrays.stream(rawCategories.split(";"))
-                    .map(String::trim)       // Trim spaces
-                    .filter(s -> !s.isEmpty()) // Remove empty entries
+                    .map(String::trim)
+                    .filter(s -> !s.isEmpty())
                     .collect(Collectors.toList());
+
+            Restaurant restaurant = (Restaurant) VaadinSession.getCurrent().getAttribute("user");
+            if (restaurant == null) {
+                showNotification("Restaurant session error.", createDishButton);
+                return;
+            }
 
             try {
                 Dish newDish = dishService.createDish(
@@ -130,18 +183,51 @@ public class RestaurantMenuView extends VerticalLayout implements BeforeEnterObs
                         categories,
                         restaurant
                 );
+                showNotification("Dish '" + newDish.getDishName() + "' created!", createDishButton);
+                refreshDishList(); // Refresh the dish list after adding a new dish
 
-                status.setText("Dish " + "'" + newDish.getDishName() + "'" + " created!");
-                status.setVisible(true);
-
-
-            } catch (IllegalArgumentException ex){
-                status.setText(ex.getMessage());
-                status.setVisible(true);
+            } catch (IllegalArgumentException ex) {
+                showNotification(ex.getMessage(), createDishButton);
             }
+
+            // Enable button after timer
+            UI ui = UI.getCurrent();
+            new Thread(() -> {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException ignored) {}
+                ui.access(() -> createDishButton.setEnabled(true));
+            }).start();
         });
 
+        return new HorizontalLayout(
+                dishName, dishDescription, dishPrice, dishCalories,
+                dishProtein, dishCategories, createDishButton
+        );
+    }
 
-        return new HorizontalLayout(dishName, dishDescription, dishPrice, dishCalories, dishProtein, dishCategories, createDishButton, status);
+    // helper method to show notification and enable button
+    private void showNotification(String message, Button enableButton) {
+        Notification.show(message, 3000, Notification.Position.MIDDLE);
+
+        // Re-enable button after delay
+        UI ui = UI.getCurrent();
+        new Thread(() -> {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException ignored) {}
+            ui.access(() -> enableButton.setEnabled(true));
+        }).start();
+    }
+
+    // helper method to toggle the addDish form
+    private void toggleFormVisibility() {
+        boolean visible = !createDishForm.isVisible();
+        createDishForm.setVisible(visible);
+        if (visible) {
+            showFormButton.setText("Cancel");
+        } else {
+            showFormButton.setText("Add a dish");
+        }
     }
 }
