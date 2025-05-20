@@ -3,7 +3,10 @@ package edu.mci.snacktrack.model;
 import com.vaadin.flow.server.VaadinSession;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class BasketSession {
 
@@ -53,6 +56,15 @@ public class BasketSession {
     public static void clearBasket() {
         VaadinSession.getCurrent().setAttribute(BASKET_KEY, new ArrayList<Dish>());
         VaadinSession.getCurrent().setAttribute(RESTAURANT_KEY, null);
+    }
+
+    public static Map<Dish, Long> getDishCounts() {
+        List<Dish> basket = getBasket();
+        return basket.stream()
+                .collect(Collectors.groupingBy(
+                        dish -> dish,
+                        Collectors.counting()
+                ));
     }
 
 }
