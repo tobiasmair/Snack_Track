@@ -138,7 +138,8 @@ public class CustomerBasket extends VerticalLayout implements BeforeEnterObserve
 
                     Notification.show("Order #" + createOrder.getOrderId() + "created!", 1000, Notification.Position.MIDDLE);
 
-                    UI.getCurrent().getPage().reload();
+                    //UI.getCurrent().getPage().reload();
+                    UI.getCurrent().navigate("customer-orders");
 
                 } catch (Exception e) {
                     Notification.show("Failed to checkout basket " + e.getMessage(), 3000, Notification.Position.MIDDLE);
