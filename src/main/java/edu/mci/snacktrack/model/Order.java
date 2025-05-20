@@ -39,8 +39,13 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
-
     private LocalDateTime createdAt;
+
+    @Column(name = "total_price")
+    private double totalPrice;
+
+    @Column(name = "total_calories")
+    private int totalCalories;
 
     @PrePersist
     protected void onCreate() {
@@ -49,9 +54,17 @@ public class Order {
 
     public Order(){
         this.orderedDishes = new ArrayList<>();
-        this.customer = null; // TODO this is null for testing -> later implement so that this is the customer account that creates the order
-        this.restaurant = null; // TODO this is null for testing -> later implement so that this is the restaurant the user has selected
         setOrderStatus(OrderStatus.PLACED);
+    }
+
+    public void calculateTotals() {
+        this.totalPrice = orderedDishes.stream()
+                .mapToDouble(Dish::getPrice)
+                .sum();
+
+        this.totalCalories = orderedDishes.stream()
+                .mapToInt(Dish::getCalories)
+                .sum();
     }
 }
 
