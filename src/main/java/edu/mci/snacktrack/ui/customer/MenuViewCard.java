@@ -39,8 +39,9 @@ public class MenuViewCard extends VerticalLayout {
         Paragraph price = new Paragraph("Price: €" + dish.getPrice());
         Paragraph calories = new Paragraph("Calories: " + dish.getCalories());
         Paragraph description = new Paragraph(dish.getDishDescription());
+        Paragraph categories = new Paragraph("Categories: " + String.join(", ", dish.getCategory()));
 
-        add(name, price, calories, description);
+        add(name, price, calories, description, categories);
 
         if (showaddButton) {
             Button button = new Button("Add to basket");
@@ -49,7 +50,7 @@ public class MenuViewCard extends VerticalLayout {
 
                 try {
                     BasketSession.addDish(dish);
-                    Notification.show(dish.getDishName() + " added to basket!", 3000, Notification.Position.MIDDLE);
+                    Notification.show(dish.getDishName() + " added to basket!", 1000, Notification.Position.MIDDLE);
                 } catch (IllegalArgumentException e) {
                     Notification.show(e.getMessage(), 3000, Notification.Position.MIDDLE);
                 }
@@ -58,7 +59,7 @@ public class MenuViewCard extends VerticalLayout {
                 UI ui = UI.getCurrent();
                 new Thread(() -> {
                     try {
-                        Thread.sleep(3000);
+                        Thread.sleep(1000);
                     } catch (InterruptedException ignored) {}
                     ui.access(() -> button.setEnabled(true));
                 }).start();

@@ -25,7 +25,7 @@ public class Dish {
     private double price;
     private int calories;
     private int protein;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> category;
 
     @ManyToOne

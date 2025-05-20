@@ -72,7 +72,7 @@ public class OrderViewCard extends VerticalLayout {
             deleteButton.addClickListener(event -> {
                 boolean deleted = orderService.deleteOrder(order);
                 if (deleted) {
-                    Notification show = Notification.show("Order deleted!", 3000, Notification.Position.MIDDLE);
+                    Notification show = Notification.show("Order deleted!", 1000, Notification.Position.MIDDLE);
                 } else {
                     Notification.show("Order could not be deleted!", 3000, Notification.Position.MIDDLE);
                 }

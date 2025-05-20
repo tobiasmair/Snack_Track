@@ -106,7 +106,7 @@ public class CustomerBasket extends VerticalLayout implements BeforeEnterObserve
 
 
             if (currentBasket.isEmpty()) {
-                Notification.show("Basket is empty", 3000, Notification.Position.MIDDLE);
+                Notification.show("Basket is empty", 1000, Notification.Position.MIDDLE);
                 return;
             } else {
                 String email = (String) VaadinSession.getCurrent().getAttribute("userEmail");
@@ -124,7 +124,7 @@ public class CustomerBasket extends VerticalLayout implements BeforeEnterObserve
                     // Get the restaurant from the first dish (all dishes from same restaurant)
                     Restaurant restaurant = BasketSession.getRestaurant();
 
-                    Notification.show("CustomerId: " + customer.getCustomerId(), 3000, Notification.Position.MIDDLE);
+                    //Notification.show("CustomerId: " + customer.getCustomerId(), 3000, Notification.Position.MIDDLE);
 
                     if (restaurant == null) {
                         throw new IllegalStateException("Dish does not have a restaurant associated.");
@@ -136,7 +136,7 @@ public class CustomerBasket extends VerticalLayout implements BeforeEnterObserve
                     // Clear Basket
                     BasketSession.clearBasket();
 
-                    Notification.show("Order #" + createOrder.getOrderId() + "created!", 3000, Notification.Position.MIDDLE);
+                    Notification.show("Order #" + createOrder.getOrderId() + "created!", 1000, Notification.Position.MIDDLE);
 
                     UI.getCurrent().getPage().reload();
 
