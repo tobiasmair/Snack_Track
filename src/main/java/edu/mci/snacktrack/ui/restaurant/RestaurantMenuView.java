@@ -92,7 +92,10 @@ public class RestaurantMenuView extends VerticalLayout implements BeforeEnterObs
         Restaurant restaurant = (Restaurant) VaadinSession.getCurrent().getAttribute("user");
         if (restaurant == null) return;
 
-        List<Dish> dishes = dishService.findByRestaurant(restaurant);
+        List<Dish> dishes = dishService.findByRestaurant(restaurant)
+                .stream()
+                .filter(Dish::isActive)
+                .collect(Collectors.toList());
 
         if (dishes.isEmpty()) {
             emptyMenuMessage.setVisible(true);

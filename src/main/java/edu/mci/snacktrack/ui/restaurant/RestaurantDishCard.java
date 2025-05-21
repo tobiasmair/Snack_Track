@@ -110,6 +110,27 @@ public class RestaurantDishCard extends VerticalLayout {
             }
         });
 
-        add(title, dishName, dishDescription, dishPrice, dishCalories, dishProtein, saveButton);
+        Button deleteButton = new Button("Delete Dish", event -> {
+            try {
+                dishService.deleteDish(dish.getDishId());
+                Notification.show("Dish deleted.");
+
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ignored) {}
+                    UI.getCurrent().access(() -> UI.getCurrent().getPage().reload());
+                }).start();
+            } catch (IllegalArgumentException ex) {
+                Notification.show("Error: " + ex.getMessage());
+            }
+        });
+        deleteButton.getStyle()
+                .set("color", "#fff")
+                .set("background", "#c62828")
+                .set("margin-top", "10px");
+
+
+        add(title, dishName, dishDescription, dishPrice, dishCalories, dishProtein, saveButton, deleteButton);
     }
 }
