@@ -71,7 +71,7 @@ public class CustomerOrderHistory extends VerticalLayout implements BeforeEnterO
                     activeOrderLayout.setJustifyContentMode(JustifyContentMode.START);
 
                     activeOrders.forEach(order -> {
-                        activeOrderLayout.add(new OrderViewCard(order));
+                        activeOrderLayout.add(new OrderViewCard(order, orderService));
                     });
 
                     add(activeOrderLayout);
@@ -92,7 +92,7 @@ public class CustomerOrderHistory extends VerticalLayout implements BeforeEnterO
                     pastOrderLayout.setAlignItems(Alignment.START);
                     pastOrderLayout.setJustifyContentMode(JustifyContentMode.START);
 
-                    pastOrders.forEach(order -> pastOrderLayout.add(new OrderViewCard(order)));
+                    pastOrders.forEach(order -> pastOrderLayout.add(new OrderViewCard(order, orderService)));
                     add(pastOrderLayout);
                 }
 

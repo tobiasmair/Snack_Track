@@ -8,7 +8,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByCustomer(Customer customer);
@@ -21,4 +24,9 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             @Param("restaurant") Restaurant restaurant,
             @Param("statuses") List<OrderStatus> statuses
     );
+
+    @Query("SELECT new map(COALESCE(SUM(o.totalPrice), 0) as totalSales, COUNT(o) as orderCount) " +
+            "FROM Order o WHERE o.restaurant.restaurantId = :restaurantId " +
+            "AND o.createdAt BETWEEN :from AND :to")
+    Map<String, Number> getSalesStats(Long restaurantId, LocalDateTime from, LocalDateTime to);
 }

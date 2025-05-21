@@ -59,7 +59,7 @@ public class CustomerService implements CustomerServiceInterface {
     public Customer updateCustomerPassword(Long customerId, String newPassword) {
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new IllegalArgumentException("Customer not found"));
-        customer.setPassword(newPassword); // Hashing sollte man noch einbauen
+        customer.setPassword(newPassword); // TODO Hashing sollte man noch einbauen
         return customerRepository.save(customer);
     }
 

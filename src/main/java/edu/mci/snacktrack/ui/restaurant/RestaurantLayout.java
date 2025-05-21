@@ -77,7 +77,11 @@ public class RestaurantLayout extends AppLayout {
 
         var userMenuItem = userMenu.addItem(avatar);
         userMenuItem.add(restaurantName);
-        userMenuItem.getSubMenu().addItem("View Profile");  // TODO implement navigation to UserProfie View
+        // Navigate to Restaurant Profile
+        userMenuItem.getSubMenu().addItem("View Profile", e -> {
+            UI.getCurrent().navigate("restaurant-profile");
+        });
+        // Logout User
         userMenuItem.getSubMenu().addItem("Logout", e -> {
             VaadinSession.getCurrent().close();    // clear session
             UI.getCurrent().navigate("");   // navigate to loginView

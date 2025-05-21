@@ -2,22 +2,24 @@ package edu.mci.snacktrack.ui.customer;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.BeforeEnterObserver;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.VaadinSession;
 import edu.mci.snacktrack.model.*;
 import edu.mci.snacktrack.service.implementation.CustomerService;
 import edu.mci.snacktrack.service.implementation.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Route(value = "customer-basket", layout = CustomerLayout.class)
 @PageTitle("Customer Basket")
@@ -43,25 +45,39 @@ public class CustomerBasket extends VerticalLayout implements BeforeEnterObserve
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
 
+        // Title
         H2 title = new H2("Your Basket");
         title.getStyle().set("margin-bottom", "20px");
         add(title);
 
-        FlexLayout dishLayout = new FlexLayout();
-        dishLayout.getStyle().set("flex-wrap", "wrap");
-        dishLayout.getStyle().set("gap", "20px");
-        dishLayout.setWidthFull();
-
+        // Fetch basket items from session
         List<Dish> basketDishes = BasketSession.getBasket();
 
         if (basketDishes.isEmpty()) {
             add(new H2("Your basket is empty"));
         } else {
-            basketDishes.forEach(dish -> {
+            Map<Dish, Long> dishCounts = BasketSession.getDishCounts();
+
+            // Scrollable container for dish cards
+            Div dishesScrollContainer = new Div();
+            dishesScrollContainer.setWidth("100%");
+            dishesScrollContainer.getStyle()
+                    .set("max-height", "60vh")
+                    .set("overflow-y", "auto")
+                    .set("padding", "1rem")
+                    .set("display", "flex")
+                    .set("flex-wrap", "wrap")
+                    .set("justify-content", "center")
+                    .set("gap", "1rem");
+
+            dishCounts.forEach((dish, qty) -> {
                 MenuViewCard dishCard = new MenuViewCard(dish, false, true);
-                dishLayout.add(dishCard);
+                dishCard.setQuantity(qty);
+                dishesScrollContainer.add(dishCard);
             });
-            add(dishLayout);
+
+            add(dishesScrollContainer);
+            setFlexGrow(1, dishesScrollContainer);
 
             // Calculate Sum of order
             double totalPrice = basketDishes.stream()
@@ -90,7 +106,7 @@ public class CustomerBasket extends VerticalLayout implements BeforeEnterObserve
 
 
             if (currentBasket.isEmpty()) {
-                Notification.show("Basket is empty", 3000, Notification.Position.MIDDLE);
+                Notification.show("Basket is empty", 1000, Notification.Position.MIDDLE);
                 return;
             } else {
                 String email = (String) VaadinSession.getCurrent().getAttribute("userEmail");
@@ -108,7 +124,7 @@ public class CustomerBasket extends VerticalLayout implements BeforeEnterObserve
                     // Get the restaurant from the first dish (all dishes from same restaurant)
                     Restaurant restaurant = BasketSession.getRestaurant();
 
-                    Notification.show("CustomerId: " + customer.getCustomerId(), 3000, Notification.Position.MIDDLE);
+                    //Notification.show("CustomerId: " + customer.getCustomerId(), 3000, Notification.Position.MIDDLE);
 
                     if (restaurant == null) {
                         throw new IllegalStateException("Dish does not have a restaurant associated.");
@@ -120,9 +136,10 @@ public class CustomerBasket extends VerticalLayout implements BeforeEnterObserve
                     // Clear Basket
                     BasketSession.clearBasket();
 
-                    Notification.show("Order #" + createOrder.getOrderId() + "created!", 3000, Notification.Position.MIDDLE);
+                    Notification.show("Order #" + createOrder.getOrderId() + "created!", 1000, Notification.Position.MIDDLE);
 
-                    UI.getCurrent().getPage().reload();
+                    //UI.getCurrent().getPage().reload();
+                    UI.getCurrent().navigate("customer-orders");
 
                 } catch (Exception e) {
                     Notification.show("Failed to checkout basket " + e.getMessage(), 3000, Notification.Position.MIDDLE);

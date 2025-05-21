@@ -1,5 +1,6 @@
 package edu.mci.snacktrack.ui.customer;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.notification.Notification;
@@ -76,6 +77,7 @@ public class CustomerProfile extends VerticalLayout implements BeforeEnterObserv
 
         EmailField emailField = new EmailField("Email");
         emailField.setValue(customer.getEmail());
+        emailField.setErrorMessage("Enter a valid email address");
 
         PasswordField passwordField = new PasswordField("New Password (leave empty to keep current)");
         passwordField.setClearButtonVisible(true);
@@ -116,7 +118,13 @@ public class CustomerProfile extends VerticalLayout implements BeforeEnterObserv
 
                 if (changed) {
                     Notification.show("Profile updated successfully.");
-                    // Optional: refresh customer object here
+                    new Thread(() -> {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException ignored) {}
+                        // reload Page
+                        UI.getCurrent().getPage().reload();
+                    }).start();
                 } else {
                     Notification.show("No changes detected.");
                 }
