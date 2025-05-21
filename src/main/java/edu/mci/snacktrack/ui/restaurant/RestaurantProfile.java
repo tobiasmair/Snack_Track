@@ -16,11 +16,8 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 import edu.mci.snacktrack.model.Cuisine;
-import edu.mci.snacktrack.model.Customer;
 import edu.mci.snacktrack.model.Restaurant;
-import edu.mci.snacktrack.service.implementation.CustomerService;
 import edu.mci.snacktrack.service.implementation.RestaurantService;
-import edu.mci.snacktrack.ui.customer.CustomerLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Route(value = "restaurant-profile", layout = RestaurantLayout.class)
