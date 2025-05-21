@@ -8,7 +8,7 @@ jobs:
       - image: maven:3.8.1-openjdk-17-slim
     steps:
       - checkout
-      - run: mvn clean package -Pproduction -DskipTests -Dvaadin.offlineKey=$VAADIN_KEY
+      - run: mvn clean package -Pproduction -DskipTests -Dvaadin.offlineKey=$VAADIN_OFFLINE_KEY
       - store_artifacts:
           path: target
           destination: target
