@@ -30,4 +30,46 @@ public class DishService implements DishServiceInterface {
     }
 
 
+    // Update/Edit Dish properties
+    public Dish updateDishName(Long dishId, String newName) {
+        Dish dish = dishRepository.findById(dishId)
+                .orElseThrow(() -> new IllegalArgumentException("Dish not found"));
+        dish.setDishName(newName);
+        return dishRepository.save(dish);
+    }
+
+    public Dish updateDishDescription(Long dishId, String newDesc) {
+        Dish dish = dishRepository.findById(dishId)
+                .orElseThrow(() -> new IllegalArgumentException("Dish not found"));
+        dish.setDishDescription(newDesc);
+        return dishRepository.save(dish);
+    }
+
+    public Dish updateDishPrice(Long dishId, Double newPrice) {
+        if (newPrice == null || newPrice < 0)
+            throw new IllegalArgumentException("Price must be positive");
+        Dish dish = dishRepository.findById(dishId)
+                .orElseThrow(() -> new IllegalArgumentException("Dish not found"));
+        dish.setPrice(newPrice);
+        return dishRepository.save(dish);
+    }
+
+    public Dish updateDishCalories(Long dishId, Integer newCalories) {
+        if (newCalories == null || newCalories < 0)
+            throw new IllegalArgumentException("Calories must be positive");
+        Dish dish = dishRepository.findById(dishId)
+                .orElseThrow(() -> new IllegalArgumentException("Dish not found"));
+        dish.setCalories(newCalories);
+        return dishRepository.save(dish);
+    }
+
+    public Dish updateDishProtein(Long dishId, Integer newProtein) {
+        if (newProtein == null || newProtein < 0)
+            throw new IllegalArgumentException("Protein must be positive");
+        Dish dish = dishRepository.findById(dishId)
+                .orElseThrow(() -> new IllegalArgumentException("Dish not found"));
+        dish.setProtein(newProtein);
+        return dishRepository.save(dish);
+    }
+
 }
