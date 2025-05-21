@@ -10,6 +10,7 @@ import com.vaadin.flow.component.textfield.NumberField;
 import edu.mci.snacktrack.model.Dish;
 import edu.mci.snacktrack.service.implementation.DishService;
 import com.vaadin.flow.component.textfield.TextField;
+import edu.mci.snacktrack.ui.component.ConfirmDialog;
 
 
 public class RestaurantDishCard extends VerticalLayout {
@@ -111,19 +112,16 @@ public class RestaurantDishCard extends VerticalLayout {
         });
 
         Button deleteButton = new Button("Delete Dish", event -> {
-            try {
-                dishService.deleteDish(dish.getDishId());
-                Notification.show("Dish deleted.");
-
-                new Thread(() -> {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException ignored) {}
-                    UI.getCurrent().access(() -> UI.getCurrent().getPage().reload());
-                }).start();
-            } catch (IllegalArgumentException ex) {
-                Notification.show("Error: " + ex.getMessage());
-            }
+            ConfirmDialog confirmDialog = new ConfirmDialog(
+                    "Are you sure you want to delete the dish?",
+                    () -> {  // onConfirm
+                        dishService.deleteDish(dish.getDishId());
+                        Notification.show("Dish deleted.");
+                        UI.getCurrent().getPage().reload();
+                    },
+                    null  // onCancel (do nothing)
+            );
+            confirmDialog.open();
         });
         deleteButton.getStyle()
                 .set("color", "#fff")
