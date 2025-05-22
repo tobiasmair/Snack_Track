@@ -109,6 +109,7 @@ public class RestaurantMenuView extends VerticalLayout implements BeforeEnterObs
 
     // Dish creation form
     private HorizontalLayout createDishForm() {
+
         TextField dishName = new TextField("Dish Name");
         dishName.setRequiredIndicatorVisible(true);
         dishName.setErrorMessage("This field is required");

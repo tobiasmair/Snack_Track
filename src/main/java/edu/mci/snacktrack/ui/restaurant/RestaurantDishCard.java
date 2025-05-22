@@ -3,6 +3,7 @@ package edu.mci.snacktrack.ui.restaurant;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
@@ -36,6 +37,14 @@ public class RestaurantDishCard extends VerticalLayout {
 
     private void buildForm() {
         removeAll();
+
+        // Add Dish Image
+        String imageFileName = dish.getDishName().replaceAll(" ", "") + ".png";
+        String imagePath = "./images/" + imageFileName;
+        Image dishImage = new Image(imagePath, "Image of " + dish.getDishName());
+        dishImage.setWidth("100%");
+        dishImage.getStyle().set("border-radius", "8px 8px 0 0");
+        add(dishImage);
 
         H2 title = new H2(dish.getDishName());
 

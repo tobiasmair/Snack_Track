@@ -6,6 +6,7 @@ import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -28,8 +29,7 @@ public class RestaurantLayout extends AppLayout {
     }
 
     private Div createHeader() {
-        // TODO Replace with real logo
-        var appLogo = VaadinIcon.CUBES.create();
+        Image appLogo = new Image("./logos/LOGO.png", "Snacktrack Logo");
         appLogo.addClassNames(LumoUtility.TextColor.PRIMARY, LumoUtility.IconSize.LARGE);
 
         var appName = new Span("Snacktrack");
