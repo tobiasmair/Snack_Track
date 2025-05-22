@@ -40,13 +40,15 @@ public class AuthService {
         Optional<Restaurant> restaurantOpt = restaurantRepo.findByEmail(email.trim());
         if (restaurantOpt.isPresent()) {
             Restaurant restaurant = restaurantOpt.get();
+            if (!restaurant.isActive()) {
+                return "This restaurant has been deleted or deactivated.";  // For debugging -> in production this would say "No user found with those credentials."
+            }
             if (password.equals(restaurant.getPassword())) {
                 return "restaurant";
             } else {
                 return "Incorrect password for restaurant.";
             }
         }
-
         return "No user found with those credentials.";
     }
 

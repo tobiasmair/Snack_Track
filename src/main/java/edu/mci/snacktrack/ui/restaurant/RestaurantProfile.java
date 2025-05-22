@@ -19,6 +19,7 @@ import edu.mci.snacktrack.model.Cuisine;
 import edu.mci.snacktrack.model.Restaurant;
 import edu.mci.snacktrack.service.implementation.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
+import edu.mci.snacktrack.ui.component.ConfirmDialog;
 
 @Route(value = "restaurant-profile", layout = RestaurantLayout.class)
 @PageTitle("Restaurant Profile")
@@ -141,10 +142,30 @@ public class RestaurantProfile extends VerticalLayout implements BeforeEnterObse
                 Notification.show("Error: " + ex.getMessage());
             }
 
-
         });
 
-        add(title, restaurantName, cuisineSelect, emailField, passwordField, addressField, vatNrField, updateButton);
+        Button deleteButton = new Button("Delete Restaurant");
+        deleteButton.getStyle()
+                .set("background-color", "#ffeaea")
+                .set("color", "#c00")
+                .set("margin-top", "1.2rem");
+
+        deleteButton.addClickListener(e -> {
+            ConfirmDialog confirmDialog = new ConfirmDialog(
+                    "Are you sure you want to delete this restaurant? This action cannot be undone.",
+                    () -> {
+                        restaurantService.softDeleteRestaurant(restaurant.getRestaurantId());
+                        Notification.show("Restaurant deleted.");
+                        // Optionally log out user and redirect to login:
+                        VaadinSession.getCurrent().close();
+                        UI.getCurrent().navigate("login");
+                    },
+                    null
+            );
+            confirmDialog.open();
+        });
+
+        add(title, restaurantName, cuisineSelect, emailField, passwordField, addressField, vatNrField, updateButton, deleteButton);
     }
 
 }

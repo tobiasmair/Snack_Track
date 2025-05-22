@@ -51,6 +51,7 @@ public class RestaurantService implements RestaurantServiceInterface {
         return restaurantRepository.findByIdWithMenu(id);
     }
 
+
     // Update/Edit Restaurant Profile
     public Restaurant updateRestaurantName(Long restaurantId, String newName) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
@@ -105,7 +106,21 @@ public class RestaurantService implements RestaurantServiceInterface {
         return restaurantRepository.findByEmail(email);
     }
 
-    
+
+    public void softDeleteRestaurant(Long restaurantId) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new IllegalArgumentException("Restaurant not found"));
+
+        restaurant.setActive(false);
+        restaurant.setRestaurantName("");
+        restaurant.setEmail("");
+        restaurant.setVatNr("");
+        restaurant.setPassword("");
+        restaurant.setAddress("");
+        restaurantRepository.save(restaurant);
+    }
+
+
     // Get Stats for Report Screen
     public Map<String, Number> getSalesStats(Long restaurantId, LocalDateTime from, LocalDateTime to) {
         Map<String, Number> result = orderRepository.getSalesStats(restaurantId, from, to);
