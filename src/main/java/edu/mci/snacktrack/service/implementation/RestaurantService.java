@@ -118,4 +118,18 @@ public class RestaurantService implements RestaurantServiceInterface {
         return restaurantRepository.findByEmail(email);
     }
 
+
+    public void softDeleteRestaurant(Long restaurantId) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new IllegalArgumentException("Restaurant not found"));
+
+        restaurant.setActive(false);
+        restaurant.setRestaurantName("");
+        restaurant.setEmail("");
+        restaurant.setVatNr("");
+        restaurant.setPassword("");
+        restaurant.setAddress("");
+        restaurantRepository.save(restaurant);
+    }
+
 }
