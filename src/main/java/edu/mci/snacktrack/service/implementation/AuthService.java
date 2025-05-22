@@ -5,6 +5,7 @@ import edu.mci.snacktrack.model.Restaurant;
 import edu.mci.snacktrack.repositories.CustomerRepository;
 import edu.mci.snacktrack.repositories.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -14,11 +15,14 @@ public class AuthService {
 
     private final CustomerRepository customerRepo;
     private final RestaurantRepository restaurantRepo;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AuthService(CustomerRepository customerRepo, RestaurantRepository restaurantRepo) {
+    public AuthService(CustomerRepository customerRepo, RestaurantRepository restaurantRepo, PasswordEncoder passwordEncoder) {
         this.customerRepo = customerRepo;
         this.restaurantRepo = restaurantRepo;
+        this.passwordEncoder = passwordEncoder;
+
     }
 
     public String authenticate(String email, String password) {
@@ -33,7 +37,8 @@ public class AuthService {
             if (!customer.isActive()) {
                 return "This customer has been deleted or deactivated.";     // For debugging -> in production this would say "No user found with those credentials."
             }
-            if (password.equals(customer.getPassword())) {
+
+            if (passwordEncoder.matches(password, customer.getPassword())) {
                 return "customer";
             } else {
                 return "Incorrect password for customer.";
@@ -46,7 +51,8 @@ public class AuthService {
             if (!restaurant.isActive()) {
                 return "This restaurant has been deleted or deactivated.";  // For debugging -> in production this would say "No user found with those credentials."
             }
-            if (password.equals(restaurant.getPassword())) {
+
+            if (passwordEncoder.matches(password, restaurant.getPassword())) {
                 return "restaurant";
             } else {
                 return "Incorrect password for restaurant.";
