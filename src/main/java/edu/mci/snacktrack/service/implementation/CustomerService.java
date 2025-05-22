@@ -74,4 +74,17 @@ public class CustomerService implements CustomerServiceInterface {
         return customerRepository.findByEmail(email);
     }
 
+    public void softdeleteCustomer(Long customerId) {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new IllegalArgumentException("Customer not found"));
+
+        customer.setActive(false);
+        customer.setFirstName("");
+        customer.setLastName("");
+        customer.setEmail("");
+        customer.setPassword("");
+        customer.setAddress("");
+        customerRepository.save(customer);
+    }
+
 }
