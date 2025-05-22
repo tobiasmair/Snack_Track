@@ -43,7 +43,7 @@ public class CustomerHomeView extends VerticalLayout implements BeforeEnterObser
         constructUI();
 
         restaurantService.getAllRestaurants().forEach(restaurant -> {
-            String imageUrl = "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+            String imageUrl = getImageUrlForCuisine(restaurant.getCuisine());
 
             // Load ViewCard for every Restaurant in the DB
             GalleryViewCard card = new GalleryViewCard(
@@ -109,5 +109,22 @@ public class CustomerHomeView extends VerticalLayout implements BeforeEnterObser
             }
         }
     }
+
+    // Different Basic Images for different cuisines
+    private String getImageUrlForCuisine(Cuisine cuisine) {
+        return switch (cuisine) {
+            case ITALIAN -> "https://images.unsplash.com/photo-1498579150354-977475b7ea0b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+            case AUSTRIAN -> "https://plus.unsplash.com/premium_photo-1693879090564-4617efcd0f0b?q=80&w=1976&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+            case CHINESE -> "https://plus.unsplash.com/premium_photo-1661600135596-dcb910b05340?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+            case JAPANESE -> "https://images.unsplash.com/photo-1553621042-f6e147245754";
+            case THAI -> "https://plus.unsplash.com/premium_photo-1695936035134-05c844086f24?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+            case KOREAN -> "https://images.unsplash.com/photo-1661366394743-fe30fe478ef7?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+            case INDIAN -> "https://images.unsplash.com/photo-1585937421612-70a008356fbe?q=80&w=1936&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+            case GREEK -> "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+            case MEXICAN -> "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?q=80&w=1980&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+            case AMERICAN -> "https://images.unsplash.com/photo-1586190848861-99aa4a171e90";
+        };
+    }
+
 
 }

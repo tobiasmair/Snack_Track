@@ -3,6 +3,7 @@ package edu.mci.snacktrack.ui.customer;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
@@ -31,6 +32,14 @@ public class MenuViewCard extends VerticalLayout {
         getStyle().set("border-radius", "8px");
         getStyle().set("box-shadow", "2px 2px 8px rgba(0,0,0,0.1)");
         getStyle().set("margin", "10px");
+
+        // Add Dish Image
+        String imageFileName = dish.getDishName().replaceAll(" ", "") + ".png";
+        String imagePath = "./images/" + imageFileName;
+        Image dishImage = new Image(imagePath, "Image of " + dish.getDishName());
+        dishImage.setWidth("100%");
+        dishImage.getStyle().set("border-radius", "8px 8px 0 0");
+        add(dishImage);
 
         // Dish name
         H3 name = new H3(dish.getDishName());
@@ -87,11 +96,6 @@ public class MenuViewCard extends VerticalLayout {
         }
     }
 
-    private void updateQuantity(List<Dish> list) {
-        int current = (int) list.stream().filter(d -> d.equals(dish)).count();
-        setQuantity(current);
-    }
-
     public void setQuantity(long qty) {
         if (qty > 1) {
             quantityBadge.setText("× " + qty);
@@ -100,4 +104,5 @@ public class MenuViewCard extends VerticalLayout {
             quantityBadge.setVisible(false);
         }
     }
+
 }
