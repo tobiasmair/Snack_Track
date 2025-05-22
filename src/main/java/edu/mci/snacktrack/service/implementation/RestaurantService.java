@@ -7,6 +7,7 @@ import edu.mci.snacktrack.repositories.OrderRepository;
 import edu.mci.snacktrack.repositories.RestaurantRepository;
 import edu.mci.snacktrack.service.RestaurantServiceInterface;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -24,15 +25,17 @@ public class RestaurantService implements RestaurantServiceInterface {
     private RestaurantRepository restaurantRepository;
     private CustomerRepository customerRepository;
     private OrderRepository orderRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Restaurant createRestaurant(String restaurantName, Cuisine cuisine, String email, String password, String address, String vatNr) {
-
         if (customerRepository.findByEmail(email).isPresent() || restaurantRepository.findByEmail(email).isPresent()) {
             throw new IllegalArgumentException("A user with this email already exists.");
         }
 
-        Restaurant newRestaurant = new Restaurant(restaurantName, cuisine, email, password, address, vatNr);
+        String hashedPassword = passwordEncoder.encode(password);
+
+        Restaurant newRestaurant = new Restaurant(restaurantName, cuisine, email, hashedPassword, address, vatNr);
         restaurantRepository.save(newRestaurant);
         return newRestaurant;
     }
@@ -84,7 +87,9 @@ public class RestaurantService implements RestaurantServiceInterface {
     public Restaurant updateRestaurantPassword(Long restaurantId, String newPassword) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new IllegalArgumentException("Restaurant not found"));
-        restaurant.setPassword(newPassword); // TODO: Add hashing in production
+
+        String hashedPassword = passwordEncoder.encode(newPassword);  // Hash it!
+        restaurant.setPassword(hashedPassword);
         return restaurantRepository.save(restaurant);
     }
 
