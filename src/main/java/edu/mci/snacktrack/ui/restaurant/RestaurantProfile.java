@@ -156,9 +156,9 @@ public class RestaurantProfile extends VerticalLayout implements BeforeEnterObse
                     () -> {
                         restaurantService.softDeleteRestaurant(restaurant.getRestaurantId());
                         Notification.show("Restaurant deleted.");
-                        // Optionally log out user and redirect to login:
+                        // log out user and redirect to login:
                         VaadinSession.getCurrent().close();
-                        UI.getCurrent().navigate("login");
+                        UI.getCurrent().navigate("");
                     },
                     null
             );

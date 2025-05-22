@@ -30,15 +30,19 @@ public class Customer {
     private String password; // for now, store password unencrypted
     private String address;
 
+    @Column(name="is_active", nullable = false)
+    private boolean isActive;
+
     @OneToMany(mappedBy = "customer")
     private List<Order> orderHistory = new ArrayList<>();
 
     public Customer(String firstName, String lastName, String email, String password, String address) {
-        this.setFirstName(firstName);
-        this.setLastName(lastName);
-        this.setEmail(email);
-        this.setPassword(password);
-        this.setAddress(address);
+        setFirstName(firstName);
+        setLastName(lastName);
+        setEmail(email);
+        setPassword(password);
+        setAddress(address);
+        setActive(true);
         this.orderHistory = new ArrayList<>();
     }
 

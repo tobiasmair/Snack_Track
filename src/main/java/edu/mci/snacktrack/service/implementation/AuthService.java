@@ -30,6 +30,9 @@ public class AuthService {
         Optional<Customer> customerOpt = customerRepo.findByEmail(email.trim());
         if (customerOpt.isPresent()) {
             Customer customer = customerOpt.get();
+            if (!customer.isActive()) {
+                return "This customer has been deleted or deactivated.";     // For debugging -> in production this would say "No user found with those credentials."
+            }
             if (password.equals(customer.getPassword())) {
                 return "customer";
             } else {
