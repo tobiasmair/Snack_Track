@@ -11,6 +11,7 @@ import com.vaadin.flow.component.textfield.NumberField;
 import edu.mci.snacktrack.model.Dish;
 import edu.mci.snacktrack.service.implementation.DishService;
 import com.vaadin.flow.component.textfield.TextField;
+import edu.mci.snacktrack.ui.component.ConfirmDialog;
 
 
 public class RestaurantDishCard extends VerticalLayout {
@@ -119,6 +120,24 @@ public class RestaurantDishCard extends VerticalLayout {
             }
         });
 
-        add(title, dishName, dishDescription, dishPrice, dishCalories, dishProtein, saveButton);
+        Button deleteButton = new Button("Delete Dish", event -> {
+            ConfirmDialog confirmDialog = new ConfirmDialog(
+                    "Are you sure you want to delete the dish?",
+                    () -> {  // onConfirm
+                        dishService.deleteDish(dish.getDishId());
+                        Notification.show("Dish deleted.");
+                        UI.getCurrent().getPage().reload();
+                    },
+                    null  // onCancel (do nothing)
+            );
+            confirmDialog.open();
+        });
+        deleteButton.getStyle()
+                .set("color", "#fff")
+                .set("background", "#c62828")
+                .set("margin-top", "10px");
+
+
+        add(title, dishName, dishDescription, dishPrice, dishCalories, dishProtein, saveButton, deleteButton);
     }
 }

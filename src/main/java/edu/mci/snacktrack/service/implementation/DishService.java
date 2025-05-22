@@ -72,4 +72,19 @@ public class DishService implements DishServiceInterface {
         return dishRepository.save(dish);
     }
 
+
+    public Dish deleteDish(Long dishId) {
+        Dish dish = dishRepository.findById(dishId)
+                .orElseThrow(() -> new IllegalArgumentException("Dish not found"));
+
+        dish.setActive(false);
+        dish.setDishName("");
+        dish.setDishDescription("");
+        dish.setPrice(0.0);
+        dish.setCalories(0);
+        dish.setProtein(0);
+
+        return dishRepository.save(dish);
+    }
+
 }

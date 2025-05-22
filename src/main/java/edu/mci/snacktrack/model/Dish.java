@@ -28,6 +28,9 @@ public class Dish {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> category;
 
+    @Column(name="is_active", nullable = false)
+    private boolean isActive;
+
     @ManyToOne
     @JoinColumn(name = "restaurantId")
     private Restaurant restaurant;
@@ -40,5 +43,6 @@ public class Dish {
         this.protein = protein;
         this.category = category;
         this.restaurant = restaurant;
+        this.isActive = true;
     }
 }
