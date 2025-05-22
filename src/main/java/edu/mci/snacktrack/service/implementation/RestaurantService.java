@@ -51,19 +51,6 @@ public class RestaurantService implements RestaurantServiceInterface {
         return restaurantRepository.findByIdWithMenu(id);
     }
 
-    public Map<String, Number> getSalesStats(Long restaurantId, LocalDateTime from, LocalDateTime to) {
-        Map<String, Number> result = orderRepository.getSalesStats(restaurantId, from, to);
-
-        Number totalSales = result.getOrDefault("totalSales", 0);
-        Number orderCount = result.getOrDefault("orderCount", 0);
-
-        Map<String, Number> stats = new HashMap<>();
-        stats.put("totalSales", totalSales);
-        stats.put("orderCount", orderCount);
-
-        return stats;
-    }
-
     // Update/Edit Restaurant Profile
     public Restaurant updateRestaurantName(Long restaurantId, String newName) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
@@ -119,7 +106,20 @@ public class RestaurantService implements RestaurantServiceInterface {
     }
 
     
-  // Get Stats for Report Screen
+    // Get Stats for Report Screen
+    public Map<String, Number> getSalesStats(Long restaurantId, LocalDateTime from, LocalDateTime to) {
+        Map<String, Number> result = orderRepository.getSalesStats(restaurantId, from, to);
+
+        Number totalSales = result.getOrDefault("totalSales", 0);
+        Number orderCount = result.getOrDefault("orderCount", 0);
+
+        Map<String, Number> stats = new HashMap<>();
+        stats.put("totalSales", totalSales);
+        stats.put("orderCount", orderCount);
+
+        return stats;
+    }
+
     public Map<String, Integer> getSalesPerDish(Long restaurantId, LocalDateTime from, LocalDateTime to) {
         List<Object[]> results = orderRepository.getSalesPerDish(restaurantId, from, to);
         return results.stream()
