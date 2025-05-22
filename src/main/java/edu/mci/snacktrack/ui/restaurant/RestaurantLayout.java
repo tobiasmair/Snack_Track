@@ -6,6 +6,7 @@ import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.avatar.AvatarVariant;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -28,8 +29,7 @@ public class RestaurantLayout extends AppLayout {
     }
 
     private Div createHeader() {
-        // TODO Replace with real logo
-        var appLogo = VaadinIcon.CUBES.create();
+        Image appLogo = new Image("./logos/LOGO.png", "Snacktrack Logo");
         appLogo.addClassNames(LumoUtility.TextColor.PRIMARY, LumoUtility.IconSize.LARGE);
 
         var appName = new Span("Snacktrack");
@@ -77,7 +77,11 @@ public class RestaurantLayout extends AppLayout {
 
         var userMenuItem = userMenu.addItem(avatar);
         userMenuItem.add(restaurantName);
-        userMenuItem.getSubMenu().addItem("View Profile");  // TODO implement navigation to UserProfie View
+        // Navigate to Restaurant Profile
+        userMenuItem.getSubMenu().addItem("View Profile", e -> {
+            UI.getCurrent().navigate("restaurant-profile");
+        });
+        // Logout User
         userMenuItem.getSubMenu().addItem("Logout", e -> {
             VaadinSession.getCurrent().close();    // clear session
             UI.getCurrent().navigate("");   // navigate to loginView

@@ -1,5 +1,6 @@
 package edu.mci.snacktrack.ui.customer;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.notification.Notification;
@@ -15,6 +16,7 @@ import com.vaadin.flow.server.VaadinSession;
 import edu.mci.snacktrack.model.Customer;
 import edu.mci.snacktrack.service.implementation.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import edu.mci.snacktrack.ui.component.ConfirmDialog;
 
 
 @Route(value = "customer-profile", layout = CustomerLayout.class)
@@ -76,6 +78,7 @@ public class CustomerProfile extends VerticalLayout implements BeforeEnterObserv
 
         EmailField emailField = new EmailField("Email");
         emailField.setValue(customer.getEmail());
+        emailField.setErrorMessage("Enter a valid email address");
 
         PasswordField passwordField = new PasswordField("New Password (leave empty to keep current)");
         passwordField.setClearButtonVisible(true);
@@ -116,7 +119,13 @@ public class CustomerProfile extends VerticalLayout implements BeforeEnterObserv
 
                 if (changed) {
                     Notification.show("Profile updated successfully.");
-                    // Optional: refresh customer object here
+                    new Thread(() -> {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException ignored) {}
+                        // reload Page
+                        UI.getCurrent().getPage().reload();
+                    }).start();
                 } else {
                     Notification.show("No changes detected.");
                 }
@@ -126,7 +135,28 @@ public class CustomerProfile extends VerticalLayout implements BeforeEnterObserv
             }
         });
 
-        add(title, firstName, lastName, emailField, passwordField, addressField, updateButton);
+        Button deleteButton = new Button("Delete User");
+        deleteButton.getStyle()
+                .set("background-color", "#ffeaea")
+                .set("color", "#c00")
+                .set("margin-top", "1.2rem");
+
+        deleteButton.addClickListener(e -> {
+            ConfirmDialog confirmDialog = new ConfirmDialog(
+                    "Are you sure you want to delete this account? This action cannot be undone.",
+                    () -> {
+                        customerService.softdeleteCustomer(customer.getCustomerId());
+                        Notification.show("User deleted.");
+                        // log out user and redirect to login:
+                        VaadinSession.getCurrent().close();
+                        UI.getCurrent().navigate("");
+                    },
+                    null
+            );
+            confirmDialog.open();
+        });
+
+        add(title, firstName, lastName, emailField, passwordField, addressField, updateButton, deleteButton);
     }
 
 }

@@ -1,13 +1,18 @@
 package edu.mci.snacktrack.ui.customer;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import edu.mci.snacktrack.model.Dish;
 import edu.mci.snacktrack.model.Order;
 import edu.mci.snacktrack.model.OrderStatus;
+import edu.mci.snacktrack.service.implementation.OrderService;
 
+import java.awt.*;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -15,7 +20,7 @@ public class OrderViewCard extends VerticalLayout {
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
-    public OrderViewCard(Order order) {
+    public OrderViewCard(Order order, OrderService orderService) {
 
         addClassName("order-view-card");
         setWidth("300px");
@@ -34,7 +39,6 @@ public class OrderViewCard extends VerticalLayout {
 
         // Restaurant name
         Paragraph restaurant = new Paragraph("Restaurant: " + order.getRestaurant().getRestaurantName());
-
 
         //Paragraph dishes = new Paragraph("Dishes:");
         //order.getOrderedDishes().forEach(dish -> {dishes.add(dish.getDishName() + ", ");}); // Get the name of every Dish in the order
@@ -55,21 +59,28 @@ public class OrderViewCard extends VerticalLayout {
         }
         Paragraph dishList = new Paragraph("Dishes: " + dishNames);
 
-        double totalPrice = dishes.stream()
-                .mapToDouble(Dish::getPrice)
-                .sum();
-
-        int totalCalories = dishes.stream()
-                .mapToInt(Dish::getCalories)
-                .sum();
-
-        Paragraph totalPriceParagraph = new Paragraph("Total Price: €" + String.format("%.2f", totalPrice));
-        Paragraph totalCaloriesParagraph = new Paragraph("Total Calories: " + totalCalories + " kcal");
+        Paragraph totalPriceParagraph = new Paragraph("Total Price: €" + String.format("%.2f", order.getTotalPrice()));
+        Paragraph totalCaloriesParagraph = new Paragraph("Total Calories: " + order.getTotalCalories() + " kcal");
 
         totalPriceParagraph.getStyle().set("font-weight", "bold");
         totalCaloriesParagraph.getStyle().set("font-weight", "bold");
 
         add(title, statusBadge, restaurant, date, dishList, totalPriceParagraph, totalCaloriesParagraph);
+
+        if (order.getOrderStatus() == OrderStatus.PLACED) {
+            Button deleteButton = new Button("Delete Order");
+            deleteButton.addClickListener(event -> {
+                boolean deleted = orderService.deleteOrder(order);
+                if (deleted) {
+                    Notification show = Notification.show("Order deleted!", 1000, Notification.Position.MIDDLE);
+                } else {
+                    Notification.show("Order could not be deleted!", 3000, Notification.Position.MIDDLE);
+                }
+                UI.getCurrent().getPage().reload();
+            });
+            deleteButton.getStyle().set("margin-top", "10px").set("background-color", "#f44336").set("color", "white");
+            add(deleteButton);
+        }
 
     }
 

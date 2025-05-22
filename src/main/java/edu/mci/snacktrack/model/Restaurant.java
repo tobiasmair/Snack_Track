@@ -29,6 +29,9 @@ public class Restaurant{
     private String address;
     private String vatNr;
 
+    @Column(name="is_active", nullable = false)
+    private boolean isActive;
+
     @OneToMany(mappedBy = "restaurant")
     private List<Dish> menu  = new ArrayList<>();
 
@@ -39,6 +42,7 @@ public class Restaurant{
         setPassword(password);
         setAddress(address);
         setVatNr(vatNr);
+        setActive(true);
         this.menu = new ArrayList<>();
     }
 }

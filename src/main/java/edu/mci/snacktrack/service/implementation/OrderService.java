@@ -25,13 +25,15 @@ public class OrderService implements OrderServiceInterface {
         newOrder.setRestaurant(restaurant);
         newOrder.setOrderStatus(OrderStatus.PLACED);
 
+        // Calculate Price and Calories
+        newOrder.calculateTotals();
+
         return orderRepository.save(newOrder);
     }
 
     public List<Order> getOrderbyCustomer(Customer customer) {
         return orderRepository.findByCustomerWithDishes(customer);
     };
-
 
     public List<Order> getOpenOrdersByRestaurant(Restaurant restaurant) {
         return orderRepository.findByRestaurantAndOrderStatusInWithDishes(
@@ -50,6 +52,16 @@ public class OrderService implements OrderServiceInterface {
                 restaurant,
                 List.of(OrderStatus.ARRIVED)
         );
+    }
+
+    public boolean deleteOrder(Order order) {
+        // Delete order before Accepted from restaurant
+        if (order.getOrderStatus() == OrderStatus.PLACED) {
+            orderRepository.delete(order);
+            return true;
+        }
+
+        return false;
     }
 
 

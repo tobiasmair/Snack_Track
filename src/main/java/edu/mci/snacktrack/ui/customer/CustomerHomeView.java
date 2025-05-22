@@ -2,13 +2,11 @@ package edu.mci.snacktrack.ui.customer;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.OrderedList;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.VaadinSession;
-import com.vaadin.flow.theme.lumo.LumoUtility;
 import com.vaadin.flow.theme.lumo.LumoUtility.AlignItems;
 import com.vaadin.flow.theme.lumo.LumoUtility.FontSize;
 import com.vaadin.flow.theme.lumo.LumoUtility.JustifyContent;
@@ -19,7 +17,6 @@ import edu.mci.snacktrack.model.Cuisine;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import edu.mci.snacktrack.service.implementation.RestaurantService;
-import com.vaadin.flow.router.RouteParameters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,7 +26,7 @@ import java.util.List;
 @PageTitle("Customer Home")
 public class CustomerHomeView extends VerticalLayout implements BeforeEnterObserver {
 
-    private  OrderedList imageContainer;
+    private  HorizontalLayout restaurantContainer;
     private List<GalleryViewCard> allCards = new ArrayList<>();
     private final RestaurantService restaurantService;
 
@@ -46,7 +43,7 @@ public class CustomerHomeView extends VerticalLayout implements BeforeEnterObser
         constructUI();
 
         restaurantService.getAllRestaurants().forEach(restaurant -> {
-            String imageUrl = "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+            String imageUrl = getImageUrlForCuisine(restaurant.getCuisine());
 
             // Load ViewCard for every Restaurant in the DB
             GalleryViewCard card = new GalleryViewCard(
@@ -56,15 +53,10 @@ public class CustomerHomeView extends VerticalLayout implements BeforeEnterObser
             allCards.add(card);
             card.addClickListener(event -> {
                 UI.getCurrent().navigate("customer-menu/" + restaurant.getRestaurantId());
-                //UI.getCurrent().navigate("customer-menu", new RouteParameters("restaurantId", restaurant.getRestaurantId().toString()));
             });
         });
 
         updateGallery("ALL");
-
-        //allCards.add(new GalleryViewCard("Sakura Bites", "JAPANESE", "https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=800&q=80"));
-        //allCards.add(new GalleryViewCard("La Trattoria", "ITALIAN", "https://images.unsplash.com/photo-1498579150354-977475b7ea0b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"));
-        //allCards.add(new GalleryViewCard("Bombay Palace", "INDIAN", "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=800&q=80"));
 
     }
 
@@ -78,8 +70,6 @@ public class CustomerHomeView extends VerticalLayout implements BeforeEnterObser
         VerticalLayout headerContainer = new VerticalLayout();
         H2 header = new H2("All Restaurants");
         header.addClassNames(Margin.Bottom.NONE, Margin.Top.XLARGE, FontSize.XXXLARGE);
-        //Paragraph description = new Paragraph("");
-        //description.addClassNames(Margin.Bottom.XLARGE, Margin.Top.NONE, TextColor.SECONDARY);
         headerContainer.add(header);
 
         Select<Object> cuisineFilter = new Select<>();
@@ -93,28 +83,48 @@ public class CustomerHomeView extends VerticalLayout implements BeforeEnterObser
         cuisineFilter.setItems(cuisines);
         cuisineFilter.setValue("ALL");
 
+        restaurantContainer = new HorizontalLayout();
+        restaurantContainer.setWidthFull();
+        restaurantContainer.setWrap(true);
+        restaurantContainer.setAlignItems(Alignment.CENTER);
+        restaurantContainer.setJustifyContentMode(JustifyContentMode.CENTER);
+
         cuisineFilter.addValueChangeListener(e -> updateGallery(e.getValue()));
 
-        imageContainer = new OrderedList();
-        imageContainer.addClassNames(LumoUtility.Gap.MEDIUM, LumoUtility.Display.GRID, LumoUtility.ListStyleType.NONE, LumoUtility.Margin.NONE, LumoUtility.Padding.NONE);
-
         container.add(headerContainer, cuisineFilter);
-        add(container, imageContainer);
+        add(container, restaurantContainer);
 
     }
 
     private void updateGallery(Object selected) {
-        imageContainer.removeAll();
+        restaurantContainer.removeAll();
 
         for (GalleryViewCard card : allCards) {
             if ("ALL".equals(selected)) {
-                imageContainer.add(card);
+                restaurantContainer.add(card);
             } else if (selected instanceof Cuisine cuisine) {
                 if (card.getCuisine().equalsIgnoreCase(cuisine.name())) {
-                    imageContainer.add(card);
+                    restaurantContainer.add(card);
                 }
             }
         }
     }
+
+    // Different Basic Images for different cuisines
+    private String getImageUrlForCuisine(Cuisine cuisine) {
+        return switch (cuisine) {
+            case ITALIAN -> "https://images.unsplash.com/photo-1498579150354-977475b7ea0b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+            case AUSTRIAN -> "https://plus.unsplash.com/premium_photo-1693879090564-4617efcd0f0b?q=80&w=1976&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+            case CHINESE -> "https://plus.unsplash.com/premium_photo-1661600135596-dcb910b05340?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+            case JAPANESE -> "https://images.unsplash.com/photo-1553621042-f6e147245754";
+            case THAI -> "https://plus.unsplash.com/premium_photo-1695936035134-05c844086f24?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+            case KOREAN -> "https://images.unsplash.com/photo-1661366394743-fe30fe478ef7?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+            case INDIAN -> "https://images.unsplash.com/photo-1585937421612-70a008356fbe?q=80&w=1936&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+            case GREEK -> "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+            case MEXICAN -> "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?q=80&w=1980&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+            case AMERICAN -> "https://images.unsplash.com/photo-1586190848861-99aa4a171e90";
+        };
+    }
+
 
 }

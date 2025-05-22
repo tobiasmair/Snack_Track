@@ -25,20 +25,24 @@ public class Dish {
     private double price;
     private int calories;
     private int protein;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> category;
+
+    @Column(name="is_active", nullable = false)
+    private boolean isActive;
 
     @ManyToOne
     @JoinColumn(name = "restaurantId")
     private Restaurant restaurant;
 
     public Dish(String dishName, String dishDescription, double price, int calories, int protein, List<String> category, Restaurant restaurant) {
-        this.dishName = dishName;
-        this.dishDescription = dishDescription;
-        this.price = price;
-        this.calories = calories;
-        this.protein = protein;
-        this.category = category;
-        this.restaurant = restaurant;
+        setDishName(dishName);
+        setDishDescription(dishDescription);
+        setPrice(price);
+        setCalories(calories);
+        setProtein(protein);
+        setCategory(category);
+        setRestaurant(restaurant);
+        setActive(true);
     }
 }

@@ -54,18 +54,16 @@ public class RestaurantMenuView extends VerticalLayout implements BeforeEnterObs
 
         // scrollable container for dish-cards
         dishesScrollContainer.setWidth("100%");
+        dishesScrollContainer.setHeight("60vh"); // or any height you prefer
         dishesScrollContainer.getStyle()
-                .set("max-height", "60vh")
-                .set("overflow-y", "auto")
-                .set("padding", "1rem")
                 .set("display", "flex")
                 .set("flex-wrap", "wrap")
-                .set("justify-content", "center")
-                .set("gap", "1rem");
+                .set("overflow-y", "auto")
+                .set("gap", "1.5rem")
+                .set("padding", "1rem")
+                .set("justify-content", "center"); // Optional: center cards
 
         add(dishesScrollContainer);
-        setFlexGrow(1, dishesScrollContainer); // makes the scroll container fill available space
-
 
         emptyMenuMessage.setText("Menu is empty → Create a dish!");
         emptyMenuMessage.getStyle()
@@ -94,20 +92,24 @@ public class RestaurantMenuView extends VerticalLayout implements BeforeEnterObs
         Restaurant restaurant = (Restaurant) VaadinSession.getCurrent().getAttribute("user");
         if (restaurant == null) return;
 
-        List<Dish> dishes = dishService.findByRestaurant(restaurant);
+        List<Dish> dishes = dishService.findByRestaurant(restaurant)
+                .stream()
+                .filter(Dish::isActive)
+                .collect(Collectors.toList());
 
         if (dishes.isEmpty()) {
             emptyMenuMessage.setVisible(true);
         } else {
             emptyMenuMessage.setVisible(false);
             for (Dish dish : dishes) {
-                dishesScrollContainer.add(new MenuViewCard(dish, false, true));
+                dishesScrollContainer.add(new RestaurantDishCard(dish, dishService));
             }
         }
     }
 
     // Dish creation form
     private HorizontalLayout createDishForm() {
+
         TextField dishName = new TextField("Dish Name");
         dishName.setRequiredIndicatorVisible(true);
         dishName.setErrorMessage("This field is required");

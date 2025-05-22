@@ -3,6 +3,8 @@
 # -------------------------
 FROM maven:3.8.1-openjdk-17-slim AS build
 
+ARG VAADIN_OFFLINE_KEY
+
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
     apt-get update -qq && \
     apt-get install -qq --no-install-recommends nodejs
@@ -18,8 +20,8 @@ RUN mvn dependency:go-offline -Pproduction
 COPY --chown=myuser:myuser src src
 COPY --chown=myuser:myuser src/main/frontend frontend
 
-RUN mvn clean package -DskipTests -Pproduction \
-    -Dvaadin.offlineKey=${VAADIN_OFFLINE_KEY}
+RUN mvn clean package -DskipTests -Pproduction -Dvaadin.offlineKey=$VAADIN_OFFLINE_KEY
+
 
 # -------------------------
 # 🚀 Run Stage - To the Moon -->
