@@ -8,7 +8,7 @@ jobs:
       - image: maven:3.8.1-openjdk-17-slim
     steps:
       - checkout
-      - run: mvn clean package -Pproduction -DskipTests -Dvaadin.offlineKey=$VAADIN_KEY
+      - run: mvn clean package -Pproduction -DskipTests -Dvaadin.offlineKey=$VAADIN_OFFLINE_KEY
       - store_artifacts:
           path: target
           destination: target
@@ -23,7 +23,7 @@ jobs:
       - run:
           name: Docker Build & Push
           command: |
-            docker build -t vaadindockercontainer.azurecr.io/vaadincrm:latest .
+            docker build --build-arg VAADIN_OFFLINE_KEY=$VAADIN_OFFLINE_KEY -t vaadindockercontainer.azurecr.io/vaadincrm:latest .
             echo $DOCKER_PASS | docker login vaadindockercontainer.azurecr.io -u $DOCKER_USER --password-stdin
             docker push vaadindockercontainer.azurecr.io/vaadincrm:latest
       - run:

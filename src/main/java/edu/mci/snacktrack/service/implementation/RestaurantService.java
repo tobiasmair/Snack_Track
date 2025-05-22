@@ -64,6 +64,62 @@ public class RestaurantService implements RestaurantServiceInterface {
         return stats;
     }
 
+    // Update/Edit Restaurant Profile
+    public Restaurant updateRestaurantName(Long restaurantId, String newName) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new IllegalArgumentException("Restaurant not found"));
+        restaurant.setRestaurantName(newName);
+        return restaurantRepository.save(restaurant);
+    }
+
+
+    public Restaurant updateRestaurantCuisine(Long restaurantId, Cuisine newCuisine) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new IllegalArgumentException("Restaurant not found"));
+        restaurant.setCuisine(newCuisine);
+        return restaurantRepository.save(restaurant);
+    }
+
+
+    public Restaurant updateRestaurantEmail(Long restaurantId, String newEmail) {
+        if (restaurantRepository.findByEmail(newEmail).isPresent() ||
+                customerRepository.findByEmail(newEmail).isPresent()) {
+            throw new IllegalArgumentException("Email already in use.");
+        }
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new IllegalArgumentException("Restaurant not found"));
+        restaurant.setEmail(newEmail);
+        return restaurantRepository.save(restaurant);
+    }
+
+
+    public Restaurant updateRestaurantPassword(Long restaurantId, String newPassword) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new IllegalArgumentException("Restaurant not found"));
+        restaurant.setPassword(newPassword); // TODO: Add hashing in production
+        return restaurantRepository.save(restaurant);
+    }
+
+    public Restaurant updateRestaurantAddress(Long restaurantId, String newAddress) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new IllegalArgumentException("Restaurant not found"));
+        restaurant.setAddress(newAddress);
+        return restaurantRepository.save(restaurant);
+    }
+
+    public Restaurant updateRestaurantVatNr(Long restaurantId, String newVatNr) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new IllegalArgumentException("Restaurant not found"));
+        restaurant.setVatNr(newVatNr);
+        return restaurantRepository.save(restaurant);
+    }
+
+    public Optional<Restaurant> getRestaurantByEmail(String email) {
+        return restaurantRepository.findByEmail(email);
+    }
+
+    
+  // Get Stats for Report Screen
     public Map<String, Integer> getSalesPerDish(Long restaurantId, LocalDateTime from, LocalDateTime to) {
         List<Object[]> results = orderRepository.getSalesPerDish(restaurantId, from, to);
         return results.stream()
@@ -81,6 +137,5 @@ public class RestaurantService implements RestaurantServiceInterface {
                         r -> (Double) r[1]
                 ));
     }
-
 
 }
