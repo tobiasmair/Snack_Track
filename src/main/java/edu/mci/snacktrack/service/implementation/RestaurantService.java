@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -62,5 +63,24 @@ public class RestaurantService implements RestaurantServiceInterface {
 
         return stats;
     }
+
+    public Map<String, Integer> getSalesPerDish(Long restaurantId, LocalDateTime from, LocalDateTime to) {
+        List<Object[]> results = orderRepository.getSalesPerDish(restaurantId, from, to);
+        return results.stream()
+                .collect(Collectors.toMap(
+                        r -> (String) r[0],
+                        r -> ((Long) r[1]).intValue()
+                ));
+    }
+
+    public Map<String, Double> getSalesPerCustomer(Long restaurantId, LocalDateTime from, LocalDateTime to) {
+        List<Object[]> results = orderRepository.getSalesPerCustomer(restaurantId, from, to);
+        return results.stream()
+                .collect(Collectors.toMap(
+                        r -> (String) r[0],
+                        r -> (Double) r[1]
+                ));
+    }
+
 
 }

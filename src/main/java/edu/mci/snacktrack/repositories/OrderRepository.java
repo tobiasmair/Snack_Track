@@ -29,4 +29,19 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "FROM Order o WHERE o.restaurant.restaurantId = :restaurantId " +
             "AND o.createdAt BETWEEN :from AND :to")
     Map<String, Number> getSalesStats(Long restaurantId, LocalDateTime from, LocalDateTime to);
+
+    @Query("SELECT d.dishName, COUNT(o) as orderCount " +
+            "FROM Order o JOIN o.orderedDishes d " +
+            "WHERE o.restaurant.restaurantId = :restaurantId " +
+            "AND o.createdAt BETWEEN :from AND :to " +
+            "GROUP BY d.dishName")
+    List<Object[]> getSalesPerDish(Long restaurantId, LocalDateTime from, LocalDateTime to);
+
+    @Query("SELECT c.email, SUM(o.totalPrice) " +
+            "FROM Order o JOIN o.customer c " +
+            "WHERE o.restaurant.restaurantId = :restaurantId " +
+            "AND o.createdAt BETWEEN :from AND :to " +
+            "GROUP BY c.email")
+    List<Object[]> getSalesPerCustomer(Long restaurantId, LocalDateTime from, LocalDateTime to);
+
 }
