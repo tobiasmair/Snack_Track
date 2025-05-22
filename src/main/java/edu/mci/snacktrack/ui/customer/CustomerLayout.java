@@ -2,6 +2,7 @@ package edu.mci.snacktrack.ui.customer;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 
 import com.vaadin.flow.component.Component;
@@ -30,8 +31,8 @@ public class CustomerLayout extends AppLayout {
     }
 
     private Div createHeader() {
-        // TODO Replace with real logo
-        var appLogo = VaadinIcon.CUBES.create();
+        Image appLogo = new Image("./logos/LOGO.png", "Snacktrack Logo");
+        //var appLogo = VaadinIcon.CUBES.create();
         appLogo.addClassNames(TextColor.PRIMARY, IconSize.LARGE);
 
         var appName = new Span("Snacktrack");
