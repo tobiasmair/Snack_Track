@@ -6,6 +6,7 @@ import edu.mci.snacktrack.repositories.RestaurantRepository;
 import edu.mci.snacktrack.service.CustomerServiceInterface;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -15,15 +16,17 @@ public class CustomerService implements CustomerServiceInterface {
 
         private final CustomerRepository customerRepository;
         private final RestaurantRepository restaurantRepository;
+        private final PasswordEncoder passwordEncoder;
 
     @Override
     public Customer createCustomer(String firstName, String lastName, String email, String password, String address) {
-
         if (customerRepository.findByEmail(email).isPresent() || restaurantRepository.findByEmail(email).isPresent()) {
             throw new IllegalArgumentException("A user with this email already exists.");
         }
 
-        Customer newCustomer = new Customer(firstName, lastName, email, password, address);
+        String hashedPassword = passwordEncoder.encode(password);
+
+        Customer newCustomer = new Customer(firstName, lastName, email, hashedPassword, address);
         customerRepository.save(newCustomer);
 
         return newCustomer;
@@ -59,7 +62,9 @@ public class CustomerService implements CustomerServiceInterface {
     public Customer updateCustomerPassword(Long customerId, String newPassword) {
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new IllegalArgumentException("Customer not found"));
-        customer.setPassword(newPassword); // TODO Hashing sollte man noch einbauen
+
+        String hashedPassword = passwordEncoder.encode(newPassword);
+        customer.setPassword(hashedPassword);
         return customerRepository.save(customer);
     }
 
@@ -72,6 +77,19 @@ public class CustomerService implements CustomerServiceInterface {
 
     public Optional<Customer> getCustomerByEmail(String email) {
         return customerRepository.findByEmail(email);
+    }
+
+    public void softdeleteCustomer(Long customerId) {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new IllegalArgumentException("Customer not found"));
+
+        customer.setActive(false);
+        customer.setFirstName("");
+        customer.setLastName("");
+        customer.setEmail("");
+        customer.setPassword("");
+        customer.setAddress("");
+        customerRepository.save(customer);
     }
 
 }

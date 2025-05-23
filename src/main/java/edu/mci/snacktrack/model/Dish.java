@@ -36,13 +36,13 @@ public class Dish {
     private Restaurant restaurant;
 
     public Dish(String dishName, String dishDescription, double price, int calories, int protein, List<String> category, Restaurant restaurant) {
-        this.dishName = dishName;
-        this.dishDescription = dishDescription;
-        this.price = price;
-        this.calories = calories;
-        this.protein = protein;
-        this.category = category;
-        this.restaurant = restaurant;
-        this.isActive = true;
+        setDishName(dishName);
+        setDishDescription(dishDescription);
+        setPrice(price);
+        setCalories(calories);
+        setProtein(protein);
+        setCategory(category);
+        setRestaurant(restaurant);
+        setActive(true);
     }
 }
