@@ -16,6 +16,7 @@ import com.vaadin.flow.server.VaadinSession;
 import edu.mci.snacktrack.model.Customer;
 import edu.mci.snacktrack.service.implementation.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import edu.mci.snacktrack.ui.component.ConfirmDialog;
 
 
 @Route(value = "customer-profile", layout = CustomerLayout.class)
@@ -134,7 +135,28 @@ public class CustomerProfile extends VerticalLayout implements BeforeEnterObserv
             }
         });
 
-        add(title, firstName, lastName, emailField, passwordField, addressField, updateButton);
+        Button deleteButton = new Button("Delete User");
+        deleteButton.getStyle()
+                .set("background-color", "#ffeaea")
+                .set("color", "#c00")
+                .set("margin-top", "1.2rem");
+
+        deleteButton.addClickListener(e -> {
+            ConfirmDialog confirmDialog = new ConfirmDialog(
+                    "Are you sure you want to delete this account? This action cannot be undone.",
+                    () -> {
+                        customerService.softdeleteCustomer(customer.getCustomerId());
+                        Notification.show("User deleted.");
+                        // log out user and redirect to login:
+                        VaadinSession.getCurrent().close();
+                        UI.getCurrent().navigate("");
+                    },
+                    null
+            );
+            confirmDialog.open();
+        });
+
+        add(title, firstName, lastName, emailField, passwordField, addressField, updateButton, deleteButton);
     }
 
 }
