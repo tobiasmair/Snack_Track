@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Bean;
 import java.time.Clock;
 
 @SpringBootApplication
-@Theme(value="snacktrack")
+@Theme(value="snacktrack")  //variant = Lumo.DARK
 public class Application implements AppShellConfigurator {
 
     @Bean
