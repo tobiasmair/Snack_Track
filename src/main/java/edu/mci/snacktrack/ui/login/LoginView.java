@@ -2,6 +2,7 @@ package edu.mci.snacktrack.ui.login;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -10,6 +11,7 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
+import com.vaadin.flow.theme.lumo.Lumo;
 import edu.mci.snacktrack.model.Customer;
 import edu.mci.snacktrack.model.Restaurant;
 import edu.mci.snacktrack.service.implementation.AuthService;
@@ -84,6 +86,18 @@ public class LoginView extends VerticalLayout {
 
         registerButton.addClickListener(e -> UI.getCurrent().navigate("registration"));
 
-        add(title, emailField, passwordField, message, loginButton, or_text, registerButton);
+        // Change between bright and dark Mode
+        var themeToggle = new Checkbox("Dark theme");
+        themeToggle.addValueChangeListener(e -> {
+            setTheme(e.getValue());
+        });
+
+        add(title, emailField, passwordField, message, loginButton, or_text, registerButton, themeToggle);
+    }
+
+    private void setTheme(boolean dark) {
+        var js = "document.documentElement.setAttribute('theme', $0)";
+
+        getElement().executeJs(js, dark ? Lumo.DARK : Lumo.LIGHT);
     }
 }
