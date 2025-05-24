@@ -2,6 +2,8 @@ package edu.mci.snacktrack.ui.restaurant;
 
 import com.vaadin.flow.component.charts.Chart;
 import com.vaadin.flow.component.charts.model.*;
+import com.vaadin.flow.component.charts.model.style.SolidColor;
+import com.vaadin.flow.component.charts.model.style.Style;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
@@ -73,6 +75,7 @@ public class RestaurantReportView extends VerticalLayout implements BeforeEnterO
         chartsLayout.add(pieChartDish, pieChartCustomer);
 
         add(new H2("Restaurant Sales Report"));
+
         add(filterCombo, orderCountLabel, salesSumLabel, chartsLayout);
     }
 
@@ -90,6 +93,9 @@ public class RestaurantReportView extends VerticalLayout implements BeforeEnterO
 
         pieChartCustomer.setWidth("45%");
         pieChartCustomer.setHeight("400px");
+
+        applyDarkThemeToChart(pieChartDish);
+        applyDarkThemeToChart(pieChartCustomer);
     }
 
     // Diagramme aktualisieren
@@ -170,4 +176,19 @@ public class RestaurantReportView extends VerticalLayout implements BeforeEnterO
         pieChartCustomer.drawChart();
 
     }
+
+    private void applyDarkThemeToChart(Chart chart) {
+        Configuration conf = chart.getConfiguration();
+
+        //conf.getChart().setBackgroundColor(new SolidColor("var(--lumo-base-color)"));
+        //conf.getChart().setPlotBackgroundColor(new SolidColor("var(--lumo-base-color)"));
+
+        conf.getChart().setBackgroundColor(new SolidColor("#333333"));
+
+        // Titel in weiß
+        Style titleStyle = new Style();
+        titleStyle.setColor(new SolidColor("#ffffff"));
+        conf.getTitle().setStyle(titleStyle);
+    }
+
 }
