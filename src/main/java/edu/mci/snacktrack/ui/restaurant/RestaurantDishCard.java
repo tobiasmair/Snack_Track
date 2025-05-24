@@ -29,7 +29,7 @@ public class RestaurantDishCard extends VerticalLayout {
                 .set("border-radius", "10px")
                 .set("border", "1px solid #eee")
                 .set("padding", "18px")
-                .set("background", "#fff")
+                .set("background-color", "var(--lumo-base-color)")
                 .set("margin", "0.5rem 0");
 
         buildForm();
