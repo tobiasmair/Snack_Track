@@ -84,16 +84,21 @@ public class CustomerBasket extends VerticalLayout implements BeforeEnterObserve
                     .mapToDouble(Dish::getPrice)
                     .sum();
 
+            int totalProtein = basketDishes.stream()
+                    .mapToInt(Dish::getProtein)
+                    .sum();
+
             int totalCalories = basketDishes.stream()
                     .mapToInt(Dish::getCalories)
                     .sum();
 
             Paragraph totalPriceParagraph = new Paragraph("Total Price: €" + String.format("%.2f", totalPrice));
             Paragraph totalCaloriesParagraph = new Paragraph("Total Calories: " + totalCalories + " kcal");
+            Paragraph totalProteinParagraph = new Paragraph("Total Protein: " + totalProtein + " g");
             totalPriceParagraph.getStyle().set("font-weight", "bold");
             totalCaloriesParagraph.getStyle().set("font-weight", "bold");
 
-            add(totalPriceParagraph, totalCaloriesParagraph);
+            add(totalPriceParagraph, totalCaloriesParagraph, totalProteinParagraph);
         }
 
         // Checkout Basket Button

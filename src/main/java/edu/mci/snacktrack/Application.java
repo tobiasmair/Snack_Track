@@ -1,6 +1,5 @@
 package edu.mci.snacktrack;
 
-import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
@@ -11,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 import java.time.Clock;
 
 @SpringBootApplication
-@Theme(value="snacktrack")  //variant = Lumo.DARK
+@Theme(value="snacktrack", variant = Lumo.DARK)  //variant = Lumo.DARK
 public class Application implements AppShellConfigurator {
 
     @Bean

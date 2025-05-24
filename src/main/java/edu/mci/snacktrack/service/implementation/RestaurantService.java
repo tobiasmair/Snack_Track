@@ -45,6 +45,10 @@ public class RestaurantService implements RestaurantServiceInterface {
         return restaurantRepository.findAll();
     }
 
+    public List<Restaurant> getAllActiveRestaurants() {
+        return restaurantRepository.findByIsActive();
+    }
+
     @Override
     public Optional<Restaurant> findById(Long id) {
         return restaurantRepository.findById(id);

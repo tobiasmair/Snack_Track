@@ -42,7 +42,8 @@ public class CustomerHomeView extends VerticalLayout implements BeforeEnterObser
         this.restaurantService = restaurantService;
         constructUI();
 
-        restaurantService.getAllRestaurants().forEach(restaurant -> {
+        // Show only active Restaurants
+        restaurantService.getAllActiveRestaurants().forEach(restaurant -> {
             String imageUrl = getImageUrlForCuisine(restaurant.getCuisine());
 
             // Load ViewCard for every Restaurant in the DB
