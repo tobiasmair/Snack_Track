@@ -47,10 +47,11 @@ public class MenuViewCard extends VerticalLayout {
 
         Paragraph price = new Paragraph("Price: €" + dish.getPrice());
         Paragraph calories = new Paragraph("Calories: " + dish.getCalories());
+        Paragraph protein = new Paragraph("Protein: " + dish.getProtein());
         Paragraph description = new Paragraph(dish.getDishDescription());
         Paragraph categories = new Paragraph("Categories: " + String.join(", ", dish.getCategory()));
 
-        add(name, price, calories, description, categories);
+        add(name, price, calories, protein, description, categories);
 
         if (showaddButton) {
             Button button = new Button("Add to basket");

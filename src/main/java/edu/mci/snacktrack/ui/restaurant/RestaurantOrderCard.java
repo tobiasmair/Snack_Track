@@ -43,6 +43,12 @@ public class RestaurantOrderCard extends VerticalLayout {
                 : "Unknown Customer";
         Paragraph customer = new Paragraph("Customer: " + customerName);
 
+        // Customer address
+        String customerAddress = order.getCustomer() != null
+                ? order.getCustomer().getAddress()
+                : "Unknown Address";
+        Paragraph address = new Paragraph("Address: " + customerAddress);
+        
         // Order date
         String formattedDate = order.getCreatedAt().format(formatter);
         Paragraph date = new Paragraph("Order date: " + formattedDate);
@@ -94,7 +100,7 @@ public class RestaurantOrderCard extends VerticalLayout {
             }
         });
 
-        add(title, statusBadge, customer, date, dishList, totalPriceParagraph, totalCaloriesParagraph, statusComboBox);
+        add(title, statusBadge, customer, address, date, dishList, totalPriceParagraph, totalCaloriesParagraph, statusComboBox);
     }
 
     private void updateStatusBadge(OrderStatus status) {
