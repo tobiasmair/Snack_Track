@@ -87,7 +87,7 @@ public class LoginView extends VerticalLayout {
         registerButton.addClickListener(e -> UI.getCurrent().navigate("registration"));
 
         // Change between bright and dark Mode
-        var themeToggle = new Checkbox("Dark theme");
+        var themeToggle = new Checkbox("Bright theme");
         themeToggle.addValueChangeListener(e -> {
             setTheme(e.getValue());
         });
@@ -95,9 +95,10 @@ public class LoginView extends VerticalLayout {
         add(title, emailField, passwordField, message, loginButton, or_text, registerButton, themeToggle);
     }
 
-    private void setTheme(boolean dark) {
+    // Change Theme
+    private void setTheme(boolean light) {
         var js = "document.documentElement.setAttribute('theme', $0)";
 
-        getElement().executeJs(js, dark ? Lumo.DARK : Lumo.LIGHT);
+        getElement().executeJs(js, light ? Lumo.LIGHT : Lumo.DARK);
     }
 }

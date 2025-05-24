@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -15,5 +16,8 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
     @Query("SELECT r FROM Restaurant r LEFT JOIN FETCH r.menu WHERE r.restaurantId = :id")
     Optional<Restaurant> findByIdWithMenu(@Param("id") Long id);
+
+    @Query("SELECT r FROM Restaurant r WHERE r.isActive = true")
+    List<Restaurant> findByIsActive();
 
 }
