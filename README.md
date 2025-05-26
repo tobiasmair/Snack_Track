@@ -27,3 +27,12 @@ SnackTrack is a lightweight application that allows:
 - Intall Vaadin and Lombok plugin
 - (Optionally install Mermaid plugin to render class diagram file)
 - Navigate to 'Application' and start the project
+
+## 🍿 Login Credentials
+- Customer:
+  email: nico@st.com
+  password: 123
+
+- Restaurant:
+  email: latrattoria@example.com
+  password: 123
