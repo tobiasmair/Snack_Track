@@ -1,23 +1,29 @@
-# Snacktrack README
+# 🍿 SnackTrack
 
-- [ ] TODO Replace or update this README with instructions relevant to your application
+**SnackTrack** is a university project
+A restaurant delivery application with focus on tracking calories and protein
+---
 
-To start the application in development mode, import it into your IDE and run the `Application` class. 
-You can also start the application from the command line by running: 
+## 📋 Project Overview
 
-```bash
-./mvnw
-```
+SnackTrack is a lightweight application that allows:
 
-To build the application in production mode, run:
+- restaurants to list their dishes on a digital menu and generate statistical reports
+- customers to order dishes and track the order status
 
-```bash
-./mvnw -Pproduction package
-```
 
-## Getting Started
+---
 
-The [Getting Started](https://vaadin.com/docs/latest/getting-started) guide will quickly familiarize you with your new
-Snacktrack implementation. You'll learn how to set up your development environment, understand the project 
-structure, and find resources to help you add muscles to your skeleton — transforming it into a fully-featured 
-application.
+## 🚀 Technologies Used
+
+- Java wiht Vaadin and Spring Boot
+- Postgresql Database
+
+---
+
+## 📦 Installation
+
+- Clone the repository
+- Intall Vaadin and Lombok plugin
+- (Optionally install Mermaid plugin to render class diagram file)
+- Navigate to 'Application' and start the project
